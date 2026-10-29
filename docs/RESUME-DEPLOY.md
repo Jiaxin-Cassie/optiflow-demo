@@ -1,5 +1,9 @@
 # OptiFlow 简历公开 Demo
 
+已部署固定入口：https://optiflow-cassie.streamlit.app/
+
+2026-10-29 验证：未登录浏览器可以进入首页，完整走通业务确认、模型确认与云端真实求解，展示 A=100、B=200、利润 10000 的案例结果；应用无异常。本机不使用代理的 HTTPS 连接也返回 200。源码位于 https://github.com/Jiaxin-Cassie/optiflow-demo 。
+
 保留当前 Streamlit V2 界面与四步流程、三类案例、自然语言补充数量限制、模型检查、真实求解、数值检查、版本对比和独立体验反馈。公开入口不需要邀请码，每个浏览器会话进入独立工作区；所有任务仍走原有服务与求解器，不使用静态结果代替计算。
 
 ## Streamlit Community Cloud 设置

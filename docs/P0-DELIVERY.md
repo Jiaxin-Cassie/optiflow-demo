@@ -23,9 +23,9 @@
 | `src/workbench/store.py` | 兼容性新增两张表，在原保存事务中注册测试与记录反馈 / 确认 |
 | `src/workbench/service.py` | 透传专用测试上下文；版本快照保存对应修订说明；原确认与求解逻辑保留 |
 | `src/workbench/package.py` | 将新增产品模块与交付文档纳入白名单 |
-| `src/workbench/tests/test_experience.py` | 三模板、解释一致性、异常模型与安全比较 |
-| `src/workbench/tests/test_usability.py` | 会话恢复、不同参与者、去重、完成 / 中断、评价、导出与删除 |
-| `src/workbench/tests/test_ui.py` | 保留原回归，新增模型异常、可用性测试完整操作与 rerun 检查 |
+| `tests/test_experience.py` | 三模板、解释一致性、异常模型与安全比较 |
+| `tests/test_usability.py` | 会话恢复、不同参与者、去重、完成 / 中断、评价、导出与删除 |
+| `tests/test_ui.py` | 保留原回归，新增模型异常、可用性测试完整操作与 rerun 检查 |
 | README、PRD、能力协议、演示指南、验收说明及本文件 | 对齐功能、数据口径、演示与本次验证边界 |
 | `docs/USABILITY-GUIDE.md` | 用户测试数据的收集、提取和删除步骤 |
 | `docs/assets/02-model-review.png`、`03-result.png` | 新界面的真实浏览器截图 |

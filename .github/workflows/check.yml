@@ -1,0 +1,31 @@
+name: Product checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  product:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: "1"
+      OPTIFLOW_HOSTED_STUDY: "0"
+      OPTIFLOW_PUBLIC_DEMO: "0"
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Solve the three business templates
+        run: python run_experiment.py --method all --dry_run
+      - name: Run product regression checks
+        run: python run_experiment.py --workbench-test

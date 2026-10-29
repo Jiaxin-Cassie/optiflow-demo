@@ -13,6 +13,16 @@
       "sha256": "91d90a966a32cbeb7256f4e87cceb996acc744e809ceb4d72936e44f8a24a2b9"
     },
     {
+      "path": ".gitattributes",
+      "bytes": 192,
+      "sha256": "1a9b3c32903764afa6b50b2cb042c6fe3300ae9c93b553ab0831c6c18c13c3e6"
+    },
+    {
+      "path": ".github/workflows/check.yml",
+      "bytes": 747,
+      "sha256": "31d30a5651e89361a0dfb5e8039d167085837900b0b64741dbdb6fe4cb6d99ba"
+    },
+    {
       "path": ".gitignore",
       "bytes": 148,
       "sha256": "2718fd6c21f27467992d93c00c109349a6974fe217ce0d9cec0095d48265db4d"
@@ -54,8 +64,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 3165,
-      "sha256": "e26189812db8ee220c734ffff8e0bc75621dab325078f6cf1df9d647e4332575"
+      "bytes": 16003,
+      "sha256": "383f66aa377010370f65930b03bd821fb6edd95ba8322c9111d262ec3cae060d"
     },
     {
       "path": "compose.public.yaml",
@@ -76,6 +86,11 @@
       "path": "deploy/Caddyfile",
       "bytes": 140,
       "sha256": "ee3d0c6c539fd0c740b17048d7fdb0c1a792f588de2971293663167474aa4e1b"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 3293,
+      "sha256": "b2fb947b4363beeedc5b79b62cbc1a93b70811c8ce710d170c9d58b8083b3fb6"
     },
     {
       "path": "docs/CLEANUP-MANIFEST.json",
@@ -104,13 +119,23 @@
     },
     {
       "path": "docs/P0-DELIVERY.md",
-      "bytes": 8152,
-      "sha256": "d0c2f1d6ad60f4e1fcba20cd58082f8589eafd93400c09684afb86081da856a5"
+      "bytes": 8110,
+      "sha256": "285eb45a06e1b89661743732138462d9a2f53dcf827e1c08c280ae4f8b047efd"
+    },
+    {
+      "path": "docs/PRODUCT-DECISIONS.md",
+      "bytes": 3079,
+      "sha256": "50dfe1429463dfe16c3035fac6df8ac6b3702a1e0291868c5e6d2dfdc12aa0b3"
+    },
+    {
+      "path": "docs/README.md",
+      "bytes": 1766,
+      "sha256": "1791cceb48c352a44d963f68c7176489cffd2921d70b65310ca2e00b6fce227f"
     },
     {
       "path": "docs/RESUME-DEPLOY.md",
-      "bytes": 3165,
-      "sha256": "e26189812db8ee220c734ffff8e0bc75621dab325078f6cf1df9d647e4332575"
+      "bytes": 3541,
+      "sha256": "99d056bc1a858714aab7ce5bb9e63c05516c350e59546e52a589b70e1904a392"
     },
     {
       "path": "docs/USABILITY-GUIDE.md",
@@ -339,8 +364,8 @@
     },
     {
       "path": "src/workbench/cli.py",
-      "bytes": 8262,
-      "sha256": "e72618abf70f3af475eb320a5a01f9bca6d9680ce3695c739d5e625ac271856d"
+      "bytes": 8273,
+      "sha256": "486c2f3a3b2d83aeee9b617db96dc32ce8ffcef12c66869620f686eced113b4a"
     },
     {
       "path": "src/workbench/explanations.py",
@@ -389,8 +414,8 @@
     },
     {
       "path": "src/workbench/package.py",
-      "bytes": 4652,
-      "sha256": "e99ae96cdd7d7728a3e80571369549b25bf1b388d4b069082247be792b648854"
+      "bytes": 4656,
+      "sha256": "fb75622052969ceb103771bad6bc2798363ca5ac779b30f640930ccdadaec9bf"
     },
     {
       "path": "src/workbench/public_demo.py",
@@ -433,76 +458,6 @@
       "sha256": "42afae98ffedb0859a4541548aa248ac81cc33b81d51613f5a48d3b45588e476"
     },
     {
-      "path": "src/workbench/tests/test_experience.py",
-      "bytes": 8277,
-      "sha256": "c18b18814db83f5a95f76b1f6de4eccfb3b9c3f032c382036fbdddf5fc00f64f"
-    },
-    {
-      "path": "src/workbench/tests/test_flow.py",
-      "bytes": 5729,
-      "sha256": "be9edd7262c6215215bb93ba59f0e8efb2bd4154d46fd9119fabace37772ce71"
-    },
-    {
-      "path": "src/workbench/tests/test_guidance.py",
-      "bytes": 2821,
-      "sha256": "96f290aa73a75c055eb20b667bcf331433b4711b7fe5534cd99dbd04a20ce3e0"
-    },
-    {
-      "path": "src/workbench/tests/test_hosting.py",
-      "bytes": 7677,
-      "sha256": "001cf54447c24950d6d68895751c7e78c79335a3ed2fd5f843cfc18c16d731af"
-    },
-    {
-      "path": "src/workbench/tests/test_hosting_ui.py",
-      "bytes": 4112,
-      "sha256": "312e9d63354d7186ccba1b892c48bcd85add407d27e3788e951e29bbed77995f"
-    },
-    {
-      "path": "src/workbench/tests/test_manual_study.py",
-      "bytes": 7596,
-      "sha256": "a54da0984634a0d4820cce081737eaa10127a20c62f07fa969885353e8c81f3f"
-    },
-    {
-      "path": "src/workbench/tests/test_manual_ui.py",
-      "bytes": 7178,
-      "sha256": "5af6fc8350a8dc29cd07110828a7c1ad5b226a1722dde7df74326f2906807a13"
-    },
-    {
-      "path": "src/workbench/tests/test_public_demo.py",
-      "bytes": 7680,
-      "sha256": "f5367f1dab794cd00b066dc62aebd72526878331c8cedd15541bac45183eac69"
-    },
-    {
-      "path": "src/workbench/tests/test_review.py",
-      "bytes": 5247,
-      "sha256": "d0031a7441908026a7fb9dafc12dd3b099f72e21bb0331e35fc0488453a2b0e6"
-    },
-    {
-      "path": "src/workbench/tests/test_routing.py",
-      "bytes": 2952,
-      "sha256": "4b4f0f817733a3269dc1fc72b3bc7bd1919881916396be0b79b71467d19ef423"
-    },
-    {
-      "path": "src/workbench/tests/test_share.py",
-      "bytes": 8513,
-      "sha256": "439e5019410d83987e5ae9027a6ec3af3e198b1286d8ffdcace527d062599246"
-    },
-    {
-      "path": "src/workbench/tests/test_tasks.py",
-      "bytes": 9071,
-      "sha256": "d5b30411015153f571f0fb5aa13529d7b4c0fd8f665b035dd58fcd333067b820"
-    },
-    {
-      "path": "src/workbench/tests/test_ui.py",
-      "bytes": 6296,
-      "sha256": "0014233774a2195a847054218329790aaeb7fa8185a3e394f766558464c76f18"
-    },
-    {
-      "path": "src/workbench/tests/test_usability.py",
-      "bytes": 6857,
-      "sha256": "53e55f486890647e17cd7b880e9db7206cdeec135a23b8a56414000e7e949ad3"
-    },
-    {
       "path": "src/workbench/theme.py",
       "bytes": 4644,
       "sha256": "7bf7715383e1d17846dd7c972c519f21ebcd4159af94803f42b57836a51cce58"
@@ -521,6 +476,81 @@
       "path": "start-local.bat",
       "bytes": 58,
       "sha256": "7fd637b1470d54e375bf5308716a96629c8d67c9b9109cb8f48e73553a0c0422"
+    },
+    {
+      "path": "tests/__init__.py",
+      "bytes": 69,
+      "sha256": "36f6f6ede606bc3e66d2b0de684ca483d2f8a1223dbad85fa14c55d9d357a916"
+    },
+    {
+      "path": "tests/test_experience.py",
+      "bytes": 8277,
+      "sha256": "c18b18814db83f5a95f76b1f6de4eccfb3b9c3f032c382036fbdddf5fc00f64f"
+    },
+    {
+      "path": "tests/test_flow.py",
+      "bytes": 5729,
+      "sha256": "be9edd7262c6215215bb93ba59f0e8efb2bd4154d46fd9119fabace37772ce71"
+    },
+    {
+      "path": "tests/test_guidance.py",
+      "bytes": 2807,
+      "sha256": "ec9d2ebccb88d29e6414b81d7a37d62355b45a474f370e6be74979d51a9207e8"
+    },
+    {
+      "path": "tests/test_hosting.py",
+      "bytes": 7677,
+      "sha256": "001cf54447c24950d6d68895751c7e78c79335a3ed2fd5f843cfc18c16d731af"
+    },
+    {
+      "path": "tests/test_hosting_ui.py",
+      "bytes": 4112,
+      "sha256": "312e9d63354d7186ccba1b892c48bcd85add407d27e3788e951e29bbed77995f"
+    },
+    {
+      "path": "tests/test_manual_study.py",
+      "bytes": 7596,
+      "sha256": "a54da0984634a0d4820cce081737eaa10127a20c62f07fa969885353e8c81f3f"
+    },
+    {
+      "path": "tests/test_manual_ui.py",
+      "bytes": 7178,
+      "sha256": "5af6fc8350a8dc29cd07110828a7c1ad5b226a1722dde7df74326f2906807a13"
+    },
+    {
+      "path": "tests/test_public_demo.py",
+      "bytes": 7742,
+      "sha256": "e7084077e269df227906eca845279a6c88f3fcd533df30ac53cff2760026ef36"
+    },
+    {
+      "path": "tests/test_review.py",
+      "bytes": 5247,
+      "sha256": "d0031a7441908026a7fb9dafc12dd3b099f72e21bb0331e35fc0488453a2b0e6"
+    },
+    {
+      "path": "tests/test_routing.py",
+      "bytes": 2952,
+      "sha256": "4b4f0f817733a3269dc1fc72b3bc7bd1919881916396be0b79b71467d19ef423"
+    },
+    {
+      "path": "tests/test_share.py",
+      "bytes": 8513,
+      "sha256": "439e5019410d83987e5ae9027a6ec3af3e198b1286d8ffdcace527d062599246"
+    },
+    {
+      "path": "tests/test_tasks.py",
+      "bytes": 9071,
+      "sha256": "d5b30411015153f571f0fb5aa13529d7b4c0fd8f665b035dd58fcd333067b820"
+    },
+    {
+      "path": "tests/test_ui.py",
+      "bytes": 6296,
+      "sha256": "0014233774a2195a847054218329790aaeb7fa8185a3e394f766558464c76f18"
+    },
+    {
+      "path": "tests/test_usability.py",
+      "bytes": 6857,
+      "sha256": "53e55f486890647e17cd7b880e9db7206cdeec135a23b8a56414000e7e949ad3"
     },
     {
       "path": "停止外网测试.cmd",

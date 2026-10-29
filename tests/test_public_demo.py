@@ -118,6 +118,7 @@ class PublicDemoTests(unittest.TestCase):
             self.assertTrue(any("未启用管理后台" in x.value for x in admin.info))
 
     def test_resume_archive_has_cloud_entry_and_excludes_credentials_and_records(self):
+        (ROOT / "runtime").mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=ROOT / "runtime", prefix="resume_package_") as folder:
             destination = Path(folder) / "resume.zip"
             build_package(destination, profile="resume")

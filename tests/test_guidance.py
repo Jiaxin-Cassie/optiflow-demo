@@ -3,7 +3,7 @@ import unittest
 from src.workbench.charts import quantity_chart_html
 from src.workbench.guidance import step_guidance
 from src.workbench.manual_study import begin_manual, save_step_note, manual_session, current_step, enrollment_records
-from src.workbench.tests import test_manual_study as study_fixture
+from tests import test_manual_study as study_fixture
 
 
 class GuidanceTests(unittest.TestCase):

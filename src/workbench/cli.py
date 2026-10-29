@@ -81,7 +81,7 @@ def dispatch(args):
                                          "--browser.gatherUsageStats", "false", *browser_options], cwd=ROOT, env=env))
     if args.workbench_test:
         import unittest
-        suite = unittest.defaultTestLoader.discover(str(ROOT / "src/workbench/tests"), pattern="test_*.py")
+        suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"), pattern="test_*.py", top_level_dir=str(ROOT))
         if not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful():
             raise SystemExit(1)
         return True
