@@ -1,0 +1,1385 @@
+{
+  "schema_version": 3,
+  "library_version": "optiflow-skills-1.0",
+  "counting_unit": "knowledge_id",
+  "scope": "Reusable LP/MILP modeling and solver guidance for business decision tasks.",
+  "taxonomy": {
+    "K1": {
+      "name": "Problem-type recognition",
+      "boundary": "Identify model families and semantic distinctions; no algebraic recipes or solver API instructions."
+    },
+    "K2": {
+      "name": "Mathematical modeling techniques",
+      "boundary": "Translate semantics into mathematics independently of solver API.",
+      "groups": {
+        "K2-A": "Variables, indices and domains",
+        "K2-B": "Unconditional quantity relations",
+        "K2-C": "Conservation and temporal coupling",
+        "K2-D": "Discrete selection structure",
+        "K2-E": "Conditional logic and disjunction",
+        "K2-F": "Objectives and preferences"
+      }
+    },
+    "K3": {
+      "name": "Solver selection and implementation",
+      "boundary": "Implement and solve an established formulation without changing its semantics."
+    }
+  },
+  "sources": {
+    "project_reorganization": {
+      "kind": "project_authored",
+      "citation": "Canonical rules rewritten from project concepts; not extracted from benchmark answers.",
+      "provenance": "No AlphaOPT learned insight texts, examples, task IDs, or training traces imported."
+    },
+    "alphaopt_taxonomy": {
+      "kind": "taxonomy_inspiration",
+      "citation": "Kong et al., AlphaOPT, arXiv:2510.18428, Table 6 and section 3.1.",
+      "url": "https://arxiv.org/abs/2510.18428",
+      "adaptation": "Labels and applicability concepts adapted to project K1/K2/K3 definitions; not a reproduction of its learned library."
+    },
+    "mosek_mio": {
+      "kind": "mathematical_reference",
+      "url": "https://docs.mosek.com/modeling-cookbook/mio.html",
+      "citation": "MOSEK Modeling Cookbook, chapter 9."
+    },
+    "gurobi_constraints": {
+      "kind": "official_documentation",
+      "url": "https://docs.gurobi.com/projects/optimizer/en/current/concepts/modeling/constraints.html"
+    },
+    "pulp_api": {
+      "kind": "official_documentation",
+      "url": "https://coin-or.github.io/pulp/technical/pulp.html"
+    },
+    "cvxpy_dcp": {
+      "kind": "official_documentation",
+      "url": "https://www.cvxpy.org/tutorial/dcp/index.html"
+    },
+    "mosek_linear": {
+      "kind": "mathematical_reference",
+      "url": "https://docs.mosek.com/modeling-cookbook/linear.html",
+      "citation": "MOSEK Modeling Cookbook, sections 2.1 and 2.2, linear and epigraph modeling.",
+      "support_boundary": "Supports algebraic primitives, not task-dependent timing or business assumptions."
+    },
+    "gurobi_multiobjective": {
+      "kind": "mathematical_reference",
+      "url": "https://docs.gurobi.com/projects/optimizer/en/current/features/multiobjective.html",
+      "citation": "Gurobi Multiple Objectives, Blended and Hierarchical Objectives.",
+      "support_boundary": "Supports weighted/hierarchical semantics; solver API is not injected as K2."
+    },
+    "gurobi_netflow": {
+      "kind": "mathematical_reference",
+      "url": "https://docs.gurobi.com/projects/examples/en/current/examples/python/netflow.html",
+      "citation": "Gurobi netflow.py, commodity balance and arc capacities.",
+      "support_boundary": "Supports network algebra, not forced dispatch of surplus available supply."
+    },
+    "k2_v4_revision": {
+      "kind": "project_authored_review",
+      "citation": "Operational review 2026-10-27; skill_library/reviews/k2_v4_review.json.",
+      "provenance": "General rules and synthetic counterexamples authored after examining pilot failures; no benchmark answers or task-specific numerical examples inserted into cards.",
+      "support_boundary": "Assistant review and finite sanity checks, not independent expert certification or a measured improvement claim."
+    },
+    "k2_v5_revision": {
+      "kind": "project_authored_revision",
+      "citation": "K2 consistency and RQ4 presentation alignment, 2026-10-27. See skill_library/reviews/k2_v5_review.json.",
+      "provenance": "Four views were authored from the same general modeling relationships and shared semantic prerequisites; symbolic illustrations contain no benchmark answers.",
+      "support_boundary": "Assistant alignment review and finite checks, not independent semantic equivalence certification."
+    },
+    "k2_v6_revision": {
+      "kind": "project_authored_revision",
+      "citation": "Joint stock/backlog notation and business-premise applicability review, 2026-10-27. See skill_library/reviews/k2_v6_review.json.",
+      "provenance": "General operational clarification using algebra and synthetic cases after exposed-pilot debugging; no benchmark answers or task-specific numerical examples inserted.",
+      "support_boundary": "Source-bound assistant review and finite synthetic checks, not independent expert certification or a measured retrieval improvement."
+    }
+  },
+  "units": [
+    {
+      "knowledge_id": "k1.transportation",
+      "title": "Transportation or transshipment",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Goods are shipped between supply and demand locations with route costs.",
+      "boundary": "Choosing which facilities to open adds facility-location structure; sequencing visits adds routing structure.",
+      "forms": {
+        "declarative": "Recognize divisible shipment allocation; intermediate transfer nodes make it a transshipment/network-flow variant. Distinguish supply availability from compulsory dispatch and demand obligations from sales opportunities."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "transportation",
+        "network_flow"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "运输与中转分配",
+      "display_description": "根据供需、路线和单位运费，分配各条路线的运输量。"
+    },
+    {
+      "knowledge_id": "k1.assignment",
+      "title": "Assignment versus quantity allocation",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Named jobs or items must be matched to eligible agents or positions.",
+      "boundary": "Divisible quantities assigned across several agents are allocation, not automatically exclusive assignment.",
+      "forms": {
+        "declarative": "Recognize assignment when the decision is who serves each item. Check whether service is exclusive, optional, or permits multiple agents; one-to-one matching additionally limits each agent."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "assignment"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "任务指派与数量分配",
+      "display_description": "区分把任务交给某个对象，还是分配可拆分的资源数量。"
+    },
+    {
+      "knowledge_id": "k1.production",
+      "title": "Production and inventory planning",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Products consume resources and decisions may span several periods.",
+      "boundary": "Multiple period labels alone do not imply carryover, initial stock, or a terminal-stock target.",
+      "forms": {
+        "declarative": "Recognize production planning; add inventory structure only when unused production can carry forward. Identify whether demand is mandatory, lost if unmet, or backlogged, and when receipts become usable."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "multi_period_production",
+        "inventory_planning"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "生产与库存计划",
+      "display_description": "结合产品消耗、可用产能与跨期库存，安排生产数量。"
+    },
+    {
+      "knowledge_id": "k1.network_flow",
+      "title": "Network-flow structure",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Quantities traverse directed arcs between sources, intermediate nodes, and sinks.",
+      "boundary": "An arbitrary network of relationships is not necessarily a conserved flow; connectivity of a vehicle tour needs additional structure.",
+      "forms": {
+        "declarative": "Recognize flow allocation and distinguish minimum-cost delivery from maximum throughput. Multiple commodities may share capacities but retain separate identities."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "network_flow"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "网络流与流量分配",
+      "display_description": "在节点和连接关系中描述资源流动及收支平衡。"
+    },
+    {
+      "knowledge_id": "k1.facility_location",
+      "title": "Facility opening versus fixed-network allocation",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "The decision includes whether to open a site, activate equipment, or select a service mode.",
+      "boundary": "Facilities mentioned as already open do not by themselves justify new opening decisions or fixed charges.",
+      "forms": {
+        "declarative": "Recognize facility-location or fixed-charge design when opening decisions interact with service allocation. Distinguish an avoidable opening cost from an already incurred sunk cost."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "facility_location"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "设施选址与启用决策",
+      "display_description": "区分是否开设设施，与在既定设施之间分配业务量。"
+    },
+    {
+      "knowledge_id": "k1.scheduling",
+      "title": "Scheduling versus aggregate capacity planning",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Tasks have execution times, ordering, deadlines, or simultaneous use of exclusive resources.",
+      "boundary": "A total workload limit without timing requirements is aggregate allocation, not necessarily scheduling.",
+      "forms": {
+        "declarative": "Recognize scheduling when start times or execution order matter. Determine whether tasks are preemptible and whether resources can process tasks in parallel; identify total completion time versus latest completion."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "scheduling"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "作业排程与产能计划",
+      "display_description": "判断是否需要安排具体开始时间、先后关系或仅分配产能。"
+    },
+    {
+      "knowledge_id": "k1.blending",
+      "title": "Blending and diet composition",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Ingredient quantities determine nutrient amounts or weighted-average quality.",
+      "boundary": "Cost minimization with nutrient minima is not automatically a knapsack problem; a concentration is not an absolute amount.",
+      "forms": {
+        "declarative": "Recognize blending/diet structure and distinguish absolute nutrient requirements from quality fractions. Determine whether quantities are divisible or restricted to packages."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "blending"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "配方与混合比例",
+      "display_description": "按成分、营养或品质要求，确定不同原料的组合数量。"
+    },
+    {
+      "knowledge_id": "k1.selection",
+      "title": "Selection, covering, or packing",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "A subset of indivisible options is chosen under budgets, coverage, or incompatibilities.",
+      "boundary": "Continuous purchasing quantities and minimum nutrient requirements alone do not establish binary knapsack structure.",
+      "forms": {
+        "declarative": "Recognize selection; distinguish covering all required elements from packing mutually compatible items. A benefit-maximizing subset under scalar capacity has knapsack structure."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "selection",
+        "covering"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "方案选择与覆盖",
+      "display_description": "从候选对象中做取舍，满足覆盖、装载或资源限制。"
+    },
+    {
+      "knowledge_id": "k1.workforce",
+      "title": "Workforce planning versus shift scheduling",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Staffing decisions include hiring, training, attrition, assignments, or shift coverage.",
+      "boundary": "Trainees are not productive staff until the stated training delay ends; labor demand is not always a headcount.",
+      "forms": {
+        "declarative": "Recognize workforce planning when staff availability changes over time; distinguish headcount from labor-hours. Shift scheduling additionally concerns who works when and any rest or overlap restrictions."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "workforce_planning",
+        "scheduling"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "人力配置与班次安排",
+      "display_description": "区分规划员工人数、安排具体班次与人员状态变化。"
+    },
+    {
+      "knowledge_id": "k1.routing",
+      "title": "Routing versus shipment allocation",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Vehicles must visit customers in connected trips with visit order or depot return requirements.",
+      "boundary": "An origin-destination shipping table does not itself imply vehicle tours or subtour constraints.",
+      "forms": {
+        "declarative": "Recognize routing when connected tours are decisions; determine whether trips are open or return to a depot and whether repeat visits are allowed."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "routing",
+        "network_flow"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "配送路径与运输分配",
+      "display_description": "判断问题需要选择完整访问顺序，还是只计算发货数量。"
+    },
+    {
+      "knowledge_id": "k1.investment",
+      "title": "Investment and uncertainty structure",
+      "category": "K1",
+      "group": "recognition",
+      "applies": "Capital is allocated among options with returns, risks, or scenario-dependent outcomes.",
+      "boundary": "An uncertain parameter alone does not authorize a probability distribution, equal scenario weights, or a chance constraint.",
+      "forms": {
+        "declarative": "Recognize investment allocation; distinguish expected return, worst-case protection, and a stated risk limit. Determine which decisions are made before information arrives and which may adapt afterward."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "portfolio",
+        "uncertainty"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "投资配置与不确定性识别",
+      "display_description": "识别投资金额、收益口径及已明确给出的不确定条件。"
+    },
+    {
+      "knowledge_id": "k2.decision_definition",
+      "title": "Decision quantities versus input data",
+      "category": "K2",
+      "group": "K2-A",
+      "applies": "The statement mixes controllable quantities with given measurements or requirements.",
+      "boundary": "A quantity described as given is a parameter unless the task explicitly permits changing it.",
+      "forms": {
+        "declarative": "A controllable quantity is a decision variable with its stated physical unit. A supplied datum is a parameter. Optimization chooses the former and cannot freely change the latter.",
+        "formula": "x_i := controllable quantity i [stated unit]; d_i := given datum i. Only x_i is chosen.",
+        "procedural": "1. List the quantities and their units. 2. Mark those the task permits changing. 3. Define variables only for those controllable quantities; keep supplied data fixed.",
+        "example": "In a production example, let x_i be the amount the planner can choose and d_i the given order. x_i is chosen in its stated unit; d_i remains fixed, so optimizing cannot remove an order by changing d_i."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "variables",
+        "parameters"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Controllability, units and timing distinguish a decision from a given datum. Fixed measurements, prices, initial states and obligations remain parameters unless changes are explicitly allowed.",
+      "display_title": "明确决策量与已知数据",
+      "display_description": "把用户能够决定的数量与已给定的参数分开，避免角色混淆。"
+    },
+    {
+      "knowledge_id": "k2.indexed_domain",
+      "title": "Indexed and sparse decision domains",
+      "category": "K2",
+      "group": "K2-A",
+      "applies": "Decisions depend on eligible entity combinations and stated decision periods, including delayed effects or returns.",
+      "boundary": "An explicitly forbidden tuple has no decision; an absent datum is not zero. Do not extend decision periods to capture later effects.",
+      "forms": {
+        "declarative": "Define decisions only for eligible entity-period tuples in E. Restrict their sums to E and distinguish each decision period from its stated effect or receipt period.",
+        "formula": "For eligible E subset I x J x T, define x_ijt only for (i,j,t) in E; every sum over x uses E.",
+        "procedural": "1. Identify entities and time events. 2. Form eligible tuples E within authorized periods. 3. Define decisions and sums on E. 4. Map effects and receipts to their stated times.",
+        "example": "For an allowed shipment (i,j,t) in E, x_ijt is dispatched at t and arrives at t+L with stated delay L. Dispatch sums use E; arrival sums use the corresponding arrival periods."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "indexing",
+        "time indexed"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "E contains allowed entity-period tuples; table axes keep their meanings. Decision time, effective time and receipt time may differ. Index each at its stated event and keep decisions within the authorized horizon.",
+      "display_title": "多对象与稀疏组合",
+      "display_description": "为产品、地点、时期等建立索引，只保留允许出现的组合。"
+    },
+    {
+      "knowledge_id": "k2.variable_domain",
+      "title": "Variable domains and justified bounds",
+      "category": "K2",
+      "group": "K2-A",
+      "applies": "Decisions represent divisible amounts, indivisible people, animals, vehicles or items, or yes/no choices.",
+      "boundary": "Use only justified bounds; signed quantities need not be nonnegative. Do not invent indivisibility or round a relaxed solution into an integer model.",
+      "forms": {
+        "declarative": "Use real variables for divisible amounts, integers for indivisible counts, and binaries for yes/no choices. Honor an explicit continuous relaxation and impose only justified bounds.",
+        "formula": "x in R for divisible amounts; n in Z for whole counts; y in {0,1} for choices; L <= x <= U only for justified L,U.",
+        "procedural": "1. Establish physical divisibility and any explicit relaxation. 2. Choose real, integer or binary domains. 3. Add justified bounds; if unclear, retain the conditional domain assumption.",
+        "example": "Divisible material uses real x; an indivisible vehicle count uses integer n; an opening choice uses binary y. An explicit relaxation may permit fractional n, but rounding its solution does not restore integer feasibility."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "k2_v4_revision",
+        "mosek_mio",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "domain",
+        "bounds"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Divisibility follows business meaning and any explicit relaxation. Whole counts are integer; divisible quantities are real. An LP label alone does not resolve indivisibility. If unclear, retain conditional domains rather than infer them from an answer.",
+      "display_title": "变量类型与数量边界",
+      "display_description": "区分连续、整数和是否选择的变量，并核对上下界依据。"
+    },
+    {
+      "knowledge_id": "k2.capacity",
+      "title": "Weighted resource capacity",
+      "category": "K2",
+      "group": "K2-B",
+      "applies": "Activities or occupied stock share a limited resource at a stated event or interval.",
+      "boundary": "Capacity is an upper bound, not required utilization or conservation. Apply it at stated events; opening-dependent capacity needs activation linking.",
+      "forms": {
+        "declarative": "At each relevant event, sum every activity consuming the same resource and bound total use by availability in the same units. Separate individual limits from shared resource capacity.",
+        "formula": "For each resource r: sum_i a_ri x_i <= b_r; a_ri x_i and b_r share units.",
+        "procedural": "1. Identify each resource and capacity event. 2. Include every simultaneous user with consistent unit consumption. 3. Bound total use by availability; include an intermediate stock peak when event order requires it.",
+        "example": "If two activities share machine time H, impose a_1*x_1+a_2*x_2<=H. The separate bounds a_1*x_1<=H and a_2*x_2<=H do not limit their combined use."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "mosek_linear",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "capacity",
+        "budget",
+        "supply"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "For each resource and event, sum all simultaneous uses with consistent units. Receipts before issues can create a storage peak before sales. Per-activity or per-path limits do not replace a shared total limit.",
+      "display_title": "资源容量约束",
+      "display_description": "按单位资源消耗加总，确保人工、机器或预算不超过上限。"
+    },
+    {
+      "knowledge_id": "k2.requirement",
+      "title": "Minimum, maximum, and exact requirements",
+      "category": "K2",
+      "group": "K2-B",
+      "applies": "A requirement limits an activity or delivered amount, including any authorized shortfall.",
+      "boundary": "Keep at-least, at-most and exact meanings distinct. Do not soften mandatory requirements or force available supply to be exhausted.",
+      "forms": {
+        "declarative": "Translate at least as a lower bound, at most as an upper bound, and exactly as equality. Keep mandatory requirements hard; permitted shortfall needs its stated treatment.",
+        "formula": "At least b: a(x)>=b; at most b: a(x)<=b; exactly b: a(x)=b.",
+        "procedural": "1. Identify the affected amount, recipient and period. 2. Map at least/at most/exactly to >=/<=/=. 3. Retain mandatory rows regardless of objective incentives; handle only authorized shortfall.",
+        "example": "For delivered amount a(x), a mandatory minimum b requires a(x)>=b even when revenue encourages delivery. Available supply b instead gives a(x)<=b; exact delivery uses equality."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "k2_v4_revision",
+        "mosek_linear",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "demand",
+        "service requirement"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Identify amount, recipient and period. Available supply is a maximum; obligations stay hard unless shortfall is explicitly allowed. Favorable objective incentives do not replace required constraints.",
+      "display_title": "最低、最高与精确需求",
+      "display_description": "把至少、至多和必须等于的业务要求转换为正确约束。"
+    },
+    {
+      "knowledge_id": "k2.proportion",
+      "title": "Fractions and weighted composition",
+      "category": "K2",
+      "group": "K2-B",
+      "applies": "A requirement limits one amount or weighted content relative to a strictly positive total.",
+      "boundary": "Cross multiplication requires a known denominator sign. If the total can be zero, specify whether an empty mixture is allowed instead of silently treating the ratio as defined. For T=0, the multiplied row extends the model to an empty activity; it is not an equivalent defined ratio. Require a positive lower bound only when justified.",
+      "forms": {
+        "declarative": "When the total is strictly positive, requiring numerator divided by total to be at least a share is equivalent to requiring numerator to be at least that share times total. In blending, content and total are the weighted and unweighted component sums.",
+        "formula": "T>0: q/T>=alpha iff q>=alpha*T; for blending q=sum_i c_i x_i, T=sum_i x_i.",
+        "procedural": "1. Define numerator q and total T. 2. Establish T>0. 3. Replace q/T>=alpha by q>=alpha*T. 4. For blending use q=sum_i c_i*x_i and T=sum_i x_i, with consistent units.",
+        "example": "For a blend of amounts x_i with content fractions c_i, total amount is T=sum_i x_i and content is q=sum_i c_i*x_i. If T>0, minimum fraction alpha is q>=alpha*T; the ratio is undefined for an empty blend."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "ratio",
+        "blending",
+        "quality"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "T is the strictly positive denominator total and q the numerator amount or content. The sign of T determines inequality direction. Allowing T=0 is a separately justified extension, not a defined ratio.",
+      "display_title": "占比与加权成分",
+      "display_description": "检查分母、总量和加权口径，表达比例及配方成分要求。"
+    },
+    {
+      "knowledge_id": "k2.static_balance",
+      "title": "Static accounting identities",
+      "category": "K2",
+      "group": "K2-B",
+      "applies": "A fixed total is partitioned into exhaustive, non-overlapping components without carryover or network movement.",
+      "boundary": "Use equality only for an accounting identity; an available budget or capacity need not be exhausted.",
+      "forms": {
+        "declarative": "An accounting whole equals the sum of its disjoint parts, plus an unused remainder only when such a remainder is meaningful. Equality is justified by complete accounting rather than by mere capacity availability.",
+        "formula": "whole = sum_i part_i + residual; include residual only when an unused remainder has meaning.",
+        "procedural": "1. Identify the accounting whole. 2. List exhaustive nonoverlapping parts in consistent units. 3. Add a residual only if unused amount is meaningful. 4. Equate the whole to those parts and that residual.",
+        "example": "For a total quantity W divided among parts p_i, complete accounting gives W=sum_i p_i. If an unused remainder r is meaningful, the identity instead is W=sum_i p_i+r; an upper capacity alone does not force r=0."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "balance",
+        "partitioned quantity"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "The whole is divided into exhaustive, nonoverlapping parts in the same units. A remainder exists only if unused amount has meaning. An availability limit alone does not require full use.",
+      "display_title": "静态收支平衡",
+      "display_description": "对同一口径的收入、支出和组成部分建立平衡关系。"
+    },
+    {
+      "knowledge_id": "k2.strict_integer",
+      "title": "Strict relations on integer quantities",
+      "category": "K2",
+      "group": "K2-B",
+      "applies": "A strict comparison is between integer-valued expressions, or an integer expression and a known real threshold.",
+      "boundary": "A unit offset is not an equivalent replacement for continuous strict inequalities; do not silently choose an epsilon for continuous models.",
+      "forms": {
+        "declarative": "For two integer expressions, strict greater-than means greater-than-or-equal to the other plus one. For an integer expression below a real threshold, its upper bound is the ceiling of the threshold minus one; above it, its lower bound is the floor plus one.",
+        "formula": "a,b in Z: a>b iff a>=b+1. a in Z,c in R: a<c iff a<=ceil(c)-1; a>c iff a>=floor(c)+1.",
+        "procedural": "1. Verify the expression is integer-valued. 2. Replace integer a>b by a>=b+1. 3. For real threshold c use a<=ceil(c)-1 for a<c and a>=floor(c)+1 for a>c. 4. Do not apply a unit shift to a continuous expression.",
+        "example": "Let n,m be integer counts and c a real threshold. Then n>m becomes n>=m+1; n<c becomes n<=ceil(c)-1; and n>c becomes n>=floor(c)+1. For example, integer n<2.4 allows n<=2, while continuous n>2 need not imply n>=3."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "gurobi_constraints",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "integer",
+        "strict inequality"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "The compared expression, not merely its variable names, must be integer-valued. Negative and noninteger thresholds use the same floor/ceiling logic. A unit shift is not equivalent for continuous quantities.",
+      "display_title": "整数数量的严格边界",
+      "display_description": "正确处理整数决策中的大于、小于等严格数量关系。"
+    },
+    {
+      "knowledge_id": "k2.inventory_balance",
+      "title": "Inventory recursion and boundaries",
+      "category": "K2",
+      "group": "K2-C",
+      "applies": "Physical stock carries between periods with receipts and actual issues or deliveries.",
+      "boundary": "Use s_t=D_t only for same-period full service; otherwise link demand and deliveries separately. No future receipts serve earlier demand. Initial/terminal conditions and event order must be justified.",
+      "forms": {
+        "declarative": "End physical stock equals previous stock plus receipts minus actual issues. Keep stock nonnegative and use supplied initial stock. Separate demand obligations from actual outflow and respect receipt/issue timing.",
+        "formula": "I_t=I_(t-1)+q_t-s_t; I_t>=0; s_t is actual issues, not automatically demand D_t; t starts at 1 with given I_0.",
+        "procedural": "1. Fix event order and supplied I_0. 2. Distinguish receipts q_t, actual issues s_t and demand D_t. 3. Set I_t=I_(t-1)+q_t-s_t, I_t>=0. 4. Track permitted deferral separately; apply only stated terminal rules.",
+        "example": "With initial stock 2, receipts 3 and actual delivery 1, end stock is 4. Demand D_t=4 leaves 3 deferred units if deferral is allowed; subtracting demand as well as delivery would double-count outflow."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "k2_v4_revision",
+        "k2_v5_revision",
+        "k2_v6_revision"
+      ],
+      "tags": [
+        "inventory",
+        "carryover"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "I_t is nonnegative end stock; q_t receipts; s_t ACTUAL issues, not external demand D_t. Record physical flows once in event order. For receipts before issues, intermediate stock is I_(t-1)+q_t; deferred obligations use separate backlog B_t.",
+      "display_title": "库存结转与期末边界",
+      "display_description": "根据期初库存、生产与需求递推库存，并检查期末要求。"
+    },
+    {
+      "knowledge_id": "k2.backlog_balance",
+      "title": "Backlog as a carried obligation",
+      "category": "K2",
+      "group": "K2-C",
+      "applies": "Unserved external demand may be deferred. Define physical stock, outstanding backlog and actual deliveries during formulation; the variables need not already appear in the problem.",
+      "boundary": "Lost sales are not backlog. Preserve demand obligations; actual deliveries alone do not replace demand in a net-stock equation. Net balance alone need not exclude simultaneous stock/backlog. Positive costs justify removing coexistence only if the joint reduction preserves all other constraints. Use supplied initial states and stated terminal obligations.",
+      "forms": {
+        "declarative": "Physical stock changes by receipts minus actual deliveries; backlog changes by external demand minus those same deliveries. Subtracting the ledgers cancels deliveries, so net stock changes by receipts minus demand. Use initial stock/backlog; handle coexistence and terminal obligations separately.",
+        "formula": "I_t=I_(t-1)+q_t-s_t; B_t=B_(t-1)+D_t-s_t; N_t=I_t-B_t; N_t=N_(t-1)+q_t-D_t; I_t,B_t,s_t>=0; N_0=I_0-B_0 given.",
+        "procedural": "1. Confirm unmet demand is deferred rather than lost. 2. Define D_t as demand and s_t as actual deliveries. 3. Write I_t=I_(t-1)+q_t-s_t and B_t=B_(t-1)+D_t-s_t with nonnegative states and deliveries. 4. Eliminate s_t to obtain N_t=N_(t-1)+q_t-D_t, N_t=I_t-B_t. 5. Apply initial states, terminal obligations and any justified exclusivity.",
+        "example": "For deferred orders, the same delivery s_t reduces physical stock and backlog: I_t=I_(t-1)+q_t-s_t and B_t=B_(t-1)+D_t-s_t. Thus N_t=N_(t-1)+q_t-D_t with N_t=I_t-B_t and supplied initial states. Setting deliveries to zero does not erase new demand; coexistence and terminal rules remain separate."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "k2_v5_revision",
+        "k2_v6_revision"
+      ],
+      "tags": [
+        "backorder",
+        "inventory"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "D_t is external demand, s_t is actual deliveries and q_t is receipts. I_t is physical stock and B_t is deferred outstanding demand, both nonnegative. N_t=I_t-B_t is net stock. The physical and backlog ledgers share the SAME s_t; eliminating it makes net-stock change equal receipts minus D_t, never receipts minus s_t.",
+      "display_title": "欠交与积压结转",
+      "display_description": "把未完成需求作为需要跨期延续的义务，而非自动消失。"
+    },
+    {
+      "knowledge_id": "k2.flow_conservation",
+      "title": "Network conservation including terminals",
+      "category": "K2",
+      "group": "K2-C",
+      "applies": "A conserved commodity traverses directed arcs; b_v is net supply, positive at sources.",
+      "boundary": "Do not apply a separate sign convention at the sink. For a closed modeled network sum_v b_v=0; losses or conversion require explicit terms.",
+      "forms": {
+        "declarative": "At every node and for every commodity, total outgoing flow minus total incoming flow equals that node net supply. The same sign convention applies to sources and sinks, so a consuming sink has negative net supply.",
+        "formula": "For every node v and commodity k: sum_(v,j) f_vjk - sum_(i,v) f_ivk = b_vk.",
+        "procedural": "1. Define directed arcs and commodities. 2. Choose b_vk positive for net supply. 3. At each node impose outgoing minus incoming flow equal to b_vk. 4. Reconcile total net supply and any explicit unused supply, losses or conversion.",
+        "example": "On an arc from source a to sink b carrying commodity k, source outgoing flow contributes positively and sink incoming flow negatively. Each node obeys sum_j f_vjk-sum_i f_ivk=b_vk, with the same sign convention at both ends."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "k2_v4_revision",
+        "gurobi_netflow",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "flow balance",
+        "network_flow"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "f_vjk is commodity k flow on directed arc (v,j), and b_vk is net supply, positive at a source. A closed network balances total net supply; losses or conversions need explicit terms. Available surplus need not all be dispatched.",
+      "display_title": "网络节点流量守恒",
+      "display_description": "检查起点、终点与中转节点的流入、流出和供需关系。"
+    },
+    {
+      "knowledge_id": "k2.lagged_transition",
+      "title": "Delayed state and workforce transitions",
+      "category": "K2",
+      "group": "K2-C",
+      "applies": "State or workforce changes become usable after explicit lead times, such as training completion or delayed delivery; in-progress resources may be unavailable.",
+      "boundary": "Specify values before the horizon and the timing of losses; an entrant must not become available before the stated delay ends.",
+      "forms": {
+        "declarative": "The usable state equals its previous value plus actions whose lead time has completed minus current losses. An action started L events earlier enters now; it cannot supply productive capacity before completion.",
+        "formula": "S_t=S_(t-1)+u_(t-L)-v_t, where L is the stated lag, v_t the current loss, and required pre-horizon u values are given.",
+        "procedural": "1. Define the event when S_t is usable and the stated lag L. 2. Identify completions u_(t-L) and current losses v_t. 3. Set S_t=S_(t-1)+u_(t-L)-v_t. 4. Supply required pre-horizon values and account for stated in-progress resource occupation.",
+        "example": "For a training cohort started at event s, availability at event s+L follows the stated lag convention. Usable workforce therefore follows S_t=S_(t-1)+u_(t-L)-v_t, using supplied pre-horizon u values; a cohort cannot contribute before its completion event."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "workforce transition",
+        "lead time"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "S_t is usable state at a declared event. Action u_s joins that state after lag L; v_t is the current loss. Required pre-horizon actions and horizon timing are supplied. Trainees/trainers reduce current productive capacity only when the task states they are occupied.",
+      "display_title": "延迟生效与人员转移",
+      "display_description": "表达培训、到货或状态转移在后续时期才能生效的限制。"
+    },
+    {
+      "knowledge_id": "k2.cumulative_balance",
+      "title": "Cumulative availability without borrowing",
+      "category": "K2",
+      "group": "K2-C",
+      "applies": "An explicitly carryable resource has timed receipts and uses and cannot be used before its availability event.",
+      "boundary": "This is a prefix condition, not just a full-horizon total. Explicit state recursion is an alternative representation; avoid counting both as independent new knowledge. Period labor and machine capacity are not carryable unless explicitly stated.",
+      "forms": {
+        "declarative": "At every time prefix, cumulative use cannot exceed initial stock plus cumulative receipts available by that prefix. Checking the final horizon total alone does not prevent use before arrival.",
+        "formula": "For every t: sum_(tau<=t) use_tau <= R_0 + sum_(tau<=t) receipt_tau.",
+        "procedural": "1. Confirm that the resource can carry forward and define receipt availability. 2. For every t add use through t. 3. Bound it by R_0 plus receipts available through t. 4. Check each prefix rather than only the horizon total.",
+        "example": "For carried material with initial R_0, uses use_tau and available receipts receipt_tau, impose sum_(tau<=t) use_tau<=R_0+sum_(tau<=t) receipt_tau for every t. A feasible final total still fails if an earlier prefix consumes material before it arrives."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "cumulative",
+        "availability"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "R_0 is initially available carried stock. Receipt and use events determine availability. Only explicitly carryable resources accumulate; unused ordinary labor or machine-hours do not automatically roll forward. Prefix and state forms describe the same mechanism.",
+      "display_title": "累计可用量限制",
+      "display_description": "确保截至每个时期的使用量不超过已实际可用的资源。"
+    },
+    {
+      "knowledge_id": "k2.precedence",
+      "title": "Precedence and release/deadline timing",
+      "category": "K2",
+      "group": "K2-C",
+      "applies": "Nonpreemptive tasks have start times, fixed durations, and specified temporal order or windows.",
+      "boundary": "Precedence does not prevent overlap between unrelated tasks; exclusive-machine conflicts need an additional no-overlap relation.",
+      "forms": {
+        "declarative": "A successor starts no earlier than predecessor start plus duration plus the stated lag. A supplied release is a lower start bound, and a supplied deadline bounds completion. This does not prevent overlap between unrelated tasks.",
+        "formula": "s_j>=s_i+p_i+lag_ij; release_i<=s_i; s_i+p_i<=deadline_i when those bounds are stated.",
+        "procedural": "1. Identify actual timing decisions and specified predecessor pairs. 2. Use s_j>=s_i+p_i+lag_ij. 3. Add release_i<=s_i and s_i+p_i<=deadline_i only when supplied. 4. Treat exclusive-resource conflicts separately.",
+        "example": "For tasks A before B with lag l_AB, s_B>=s_A+p_A+l_AB. If task A also has a stated release r_A and deadline d_A, use r_A<=s_A and s_A+p_A<=d_A; no order is thereby imposed on unrelated tasks."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "precedence",
+        "scheduling"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "s_i is a start time and p_i a fixed duration for a nonpreemptive task. Only specified order pairs, lags, releases and deadlines constrain it. Processing-time entries in a matching objective alone do not create scheduling decisions.",
+      "display_title": "先后顺序与时间窗口",
+      "display_description": "表达前置作业、最早开始和最晚完成等时间要求。"
+    },
+    {
+      "knowledge_id": "k2.cardinality",
+      "title": "Selection cardinality",
+      "category": "K2",
+      "group": "K2-D",
+      "applies": "A count restriction applies to binary choices from a defined set S.",
+      "boundary": "Count choices, not weighted resource consumption; binary variable domains are necessary for the count interpretation.",
+      "forms": {
+        "declarative": "With binary indicators for options, the number selected is their sum over the relevant set. At-most, at-least and exactly k choices correspond respectively to an upper bound, lower bound and equality on this sum.",
+        "formula": "y_i in {0,1}: sum_(i in S)y_i <= k, >= k, or =k for at-most, at-least, or exactly k.",
+        "procedural": "1. Define binary y_i for each counted option. 2. Specify the counted set S. 3. Sum its indicators. 4. Compare that sum with k using <=, >= or = according to the stated count.",
+        "example": "For a candidate set S, y_i=1 means option i is selected. Thus sum_(i in S)y_i<=k selects at most k, >=k selects at least k, and =k selects exactly k; resource weights are a different constraint."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "selection",
+        "cardinality"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Each y_i indicates selection of one option in a specified set S. Its sum counts choices, not units produced or weighted resource consumption. The count relation is supplied by the task.",
+      "display_title": "选择数量限制",
+      "display_description": "限制被选对象的个数，区分数量上限与实际业务用量。"
+    },
+    {
+      "knowledge_id": "k2.coverage",
+      "title": "Coverage, packing, and partitioning",
+      "category": "K2",
+      "group": "K2-D",
+      "applies": "Required customers, neighborhoods or elements must be served by selected sites or options within a given service radius or compatibility set.",
+      "boundary": "Coverage applies per element, unlike a single count of selected options; use equality only when duplicate coverage is prohibited.",
+      "forms": {
+        "declarative": "For each element, count selected options covering it using binary incidence and binary selection. Require at least one for covering, at most one for packing, or exactly one for partitioning.",
+        "formula": "y_i binary, a_ui in {0,1}: for every u, sum_i a_ui*y_i >=1 (cover), <=1 (pack), or =1 (partition).",
+        "procedural": "1. Build binary incidence a_ui for each element-option pair. 2. Define binary option choices y_i. 3. Form one selected-cover sum per element u. 4. Use >=1 for covering, <=1 for packing, or =1 for partitioning.",
+        "example": "For customer u and sites i, a_ui=1 when site i can serve u. Then sum_i a_ui*y_i>=1 covers u. If overlapping coverage is forbidden use <=1 for packing or =1 for exact partitioning, always separately for each u."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "covering",
+        "packing",
+        "partitioning"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "y_i selects candidate option i and a_ui is its binary incidence for required element u, built from the given service radius or compatibility relation. Each element has its own row; a global site count alone cannot ensure coverage. Coverage is not a travel tour.",
+      "display_title": "覆盖、互斥与分组",
+      "display_description": "区分至少覆盖、至多占用一次与恰好归属一组的规则。"
+    },
+    {
+      "knowledge_id": "k2.assignment",
+      "title": "Exclusive assignment and optional matching",
+      "category": "K2",
+      "group": "K2-D",
+      "applies": "Each item must choose one eligible agent; some tasks additionally limit each agent to one item.",
+      "boundary": "The agent-side at-most-one restriction is for one-to-one matching, not general assignment; optional items use at-most-one or an explicit unassigned option.",
+      "forms": {
+        "declarative": "Every mandatory item is assigned to exactly one eligible agent. Only a one-to-one matching requirement limits each agent to at most one item; ordinary assignment can let an agent serve several items.",
+        "formula": "x_ij binary for eligible (i,j): sum_j x_ij=1 for each mandatory i; sum_i x_ij<=1 only for one-to-one matching.",
+        "procedural": "1. Define binary x_ij on eligible pairs. 2. Require sum_j x_ij=1 for each mandatory item i. 3. Add sum_i x_ij<=1 only for one-to-one matching. 4. Use an optional-item convention only when unassignment is allowed.",
+        "example": "For jobs i and eligible workers j, sum_j x_ij=1 assigns each required job. When workers may do at most one job, sum_i x_ij<=1 is also needed; excess workers may remain unused. Without that requirement, the worker-side exclusivity row is omitted."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "assignment",
+        "matching"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "x_ij is a binary decision for an eligible item-agent pair. Mandatory items receive one agent; agent exclusivity applies only to one-to-one matching. Optional items may remain unassigned. Assignment processing-time costs do not alone imply start-time scheduling.",
+      "display_title": "唯一指派与可选匹配",
+      "display_description": "检查每项任务是否必须被指派，以及能否不参与匹配。"
+    },
+    {
+      "knowledge_id": "k2.subtour",
+      "title": "Connectivity beyond visit degrees",
+      "category": "K2",
+      "group": "K2-D",
+      "applies": "Binary directed travel arcs choose a connected single-depot tour visiting mandatory customers exactly once, not just distance-based service coverage.",
+      "boundary": "These cuts assume a mandatory single tour with its degree constraints. Optional visits or multiple vehicles require the corresponding modified formulation.",
+      "forms": {
+        "declarative": "In addition to single-tour visit degrees, every nonempty subset of customers must have at least one selected arc leaving it for the complement in all modeled nodes. This excludes customer cycles disconnected from the depot.",
+        "formula": "For every nonempty S subset Customers: sum_(i in S,j not in S)x_ij>=1, in addition to single-tour visit degrees.",
+        "procedural": "1. Establish the single-depot mandatory-tour setting and visit degrees. 2. For each nonempty customer subset S, count selected arcs from S to nodes outside S. 3. Require at least one such arc. 4. Use modified rules for optional visits or multiple vehicles.",
+        "example": "A cycle A-to-B-to-A can satisfy customer degrees while missing the depot. For S={A,B}, sum_(i in S,j not in S)x_ij>=1 cuts that cycle. The same outgoing cut applies to every nonempty customer subset, alongside single-tour degree constraints."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "routing",
+        "subtour"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "x_ij selects a directed travel arc among all modeled nodes, including a depot. Customers exclude the depot. The rule assumes a mandatory single connected tour and its visit-degree constraints; direct shipments or distance-based service coverage do not imply tours.",
+      "display_title": "完整路径与连通性",
+      "display_description": "在访问次数之外检查子回路，避免产生彼此分离的路线。"
+    },
+    {
+      "knowledge_id": "k2.on_off",
+      "title": "Nonnegative activity activation",
+      "category": "K2",
+      "group": "K2-E",
+      "applies": "An activity depends on a permission or enable/disable decision; define activity and binary variables during formulation.",
+      "boundary": "Permission alone never implies x>=y. Use a stated or derived U; an avoidable fixed fee belongs to the linked activation decision.",
+      "forms": {
+        "declarative": "Bound nonnegative activity above by its valid upper bound times binary permission. Off forces zero; on permits zero through the bound. Charge an avoidable fixed fee to its corresponding permission.",
+        "formula": "0<=x<=U*y, y in {0,1}, U a valid activity upper bound.",
+        "procedural": "1. Identify nonnegative activity x and binary permission y. 2. Derive valid U and impose x<=U*y. 3. Link any avoidable fixed fee to y; require positive activity only when justified.",
+        "example": "A permitted operation y=1 may be idle, while y=0 requires x=0. The relation 0<=x<=U*y enforces both; a stated fixed activation fee F contributes F*y even if an activated operation is idle."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision",
+        "k2_v6_revision"
+      ],
+      "tags": [
+        "activation",
+        "capacity linking",
+        "setup"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Binary y permits nonnegative activity x with valid bound U. Permission may be unused; a separate positive minimum needs justification. If y means actual positive integer activity, indivisibility may justify the reverse link.",
+      "display_title": "启用后才能发生的业务量",
+      "display_description": "将是否启用与非负业务量关联，保留数量上限依据。"
+    },
+    {
+      "knowledge_id": "k2.minimum_batch",
+      "title": "Zero-or-operating-interval decisions",
+      "category": "K2",
+      "group": "K2-E",
+      "applies": "Business semantics requires activity to be zero or in a justified positive interval [L,U], 0<L<=U. Introduce y during formulation; L is stated or follows from actual positive whole-count activity, and valid bounds may be derived.",
+      "boundary": "Mere permission to operate does not force positive activity. L=1 is justified only when x is an integer count and y denotes actual positive activity; a continuous positive minimum or epsilon cannot be invented.",
+      "forms": {
+        "declarative": "Activity is either zero or in a justified positive operating interval. Binary activity off forces zero; on forces activity between the lower and upper operating bounds. The lower bound may be stated or justified by positive-integer activity semantics.",
+        "formula": "L*y<=x<=U*y, y in {0,1}, 0<L<=U.",
+        "procedural": "1. Justify 0<L<=U from the task or, for actual positive integer activity, L=1. 2. Introduce binary activity indicator y. 3. Impose L*y<=x and x<=U*y. 4. Do not infer positive activity from mere permission or invent a continuous epsilon.",
+        "example": "For a machine with justified operating range [L,U], L*y<=x<=U*y gives x=0 when y=0 and L<=x<=U when y=1. Alternatively, when x counts whole units and y means actual production, the justified lower bound may be L=1."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision",
+        "k2_v6_revision"
+      ],
+      "tags": [
+        "minimum batch",
+        "semi-continuous"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "L and U are valid activity bounds with 0<L<=U. L may be explicitly specified, or L=1 may follow when x is a nonnegative INTEGER count and y means actual positive activity. Mere permission does not justify a positive L; continuous positivity needs a justified operating minimum.",
+      "display_title": "起订量与最低运行规模",
+      "display_description": "表达不启动时为零、启动后需要达到最低批量的决策。"
+    },
+    {
+      "knowledge_id": "k2.indicator",
+      "title": "Conditional affine constraints",
+      "category": "K2",
+      "group": "K2-E",
+      "applies": "A business if-then rule activates an affine inequality; its binary event indicator may be introduced during formulation.",
+      "boundary": "At y=0 the row must be redundant. Neither a satisfied row nor permission implies positive activity. Do not invent M, a positivity threshold or an unavailable premise.",
+      "forms": {
+        "declarative": "Trigger one enforces the affine inequality; trigger zero relaxes it by a valid nonnegative bound on that row's inactive violation. Satisfaction of the inequality does not force the trigger on.",
+        "formula": "y binary; a(x)<=b+M*(1-y), M>=max(0,max_inactive[a(x)-b]).",
+        "procedural": "1. Identify event direction y=1 implies a(x)<=b. 2. Derive a finite nonnegative bound M for this row's inactive violation. 3. Add a(x)<=b+M*(1-y). 4. Check both branches without assuming equivalence.",
+        "example": "For 0<=x<=U and trigger y, y=1 implies x<=b is enforced by x<=b+max(0,U-b)*(1-y). A different quantity needs its own upper bound; x<=b alone does not force y=1."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision",
+        "k2_v6_revision"
+      ],
+      "tags": [
+        "logical implication",
+        "big m"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Binary y=1 triggers affine row a(x)<=b. Derive finite nonnegative M for that row from inactive feasible bounds; distinct activities or rows need their own valid bounds. Reverse implication is separate.",
+      "display_title": "满足条件才生效的规则",
+      "display_description": "在明确条件与边界后，表达有条件执行的线性约束。"
+    },
+    {
+      "knowledge_id": "k2.disjunction",
+      "title": "At-least-one affine alternative",
+      "category": "K2",
+      "group": "K2-E",
+      "applies": "Business semantics requires at least one of several affine alternatives. Introduce branch selectors during formulation; pre-existing binary variables or a chosen encoding are not prerequisites.",
+      "boundary": "An inclusive OR needs at least one branch, not exactly one. Each relaxation bound must be valid; the binary indicates an enforced branch, not all branches that happen to hold.",
+      "forms": {
+        "declarative": "An inclusive disjunction requires at least one affine alternative to hold. Each alternative has a binary selector and a valid relaxation bound; the selectors sum to at least one. Several alternatives may hold together.",
+        "formula": "a_k(x)<=b_k+M_k*(1-z_k) for each k; sum_k z_k>=1; z_k binary with valid M_k.",
+        "procedural": "1. List the inclusive alternatives a_k(x)<=b_k. 2. Introduce binary z_k and valid M_k for each inactive row. 3. Impose a_k(x)<=b_k+M_k*(1-z_k). 4. Require sum_k z_k>=1; do not interpret selectors as exclusive truth labels.",
+        "example": "For two alternatives a_1(x)<=b_1 or a_2(x)<=b_2, impose each row with relaxation M_k*(1-z_k), binary z_k and z_1+z_2>=1. A point satisfying both original inequalities remains valid; selectors merely choose enforced branches."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision",
+        "k2_v6_revision"
+      ],
+      "tags": [
+        "either or",
+        "disjunction"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Each a_k(x)<=b_k is an affine alternative. Binary z_k certifies an enforced branch, not the truth value of every inequality. At least one branch is enforced; valid branchwise M_k makes other branches redundant and retains overlapping feasible alternatives.",
+      "display_title": "多种可行规则择一",
+      "display_description": "表达至少满足一种规则的业务选择，并保留每种条件。"
+    },
+    {
+      "knowledge_id": "k2.no_overlap",
+      "title": "Pairwise ordering on one exclusive resource",
+      "category": "K2",
+      "group": "K2-E",
+      "applies": "Two present nonpreemptive tasks must share one exclusive unit-capacity resource with fixed durations. Start-time and order variables may be introduced during formulation; a processing-time table alone does not establish shared-resource scheduling.",
+      "boundary": "Both tasks must use the same resource for this unconditional pairwise disjunction; optional or assigned tasks need presence/assignment gating. Use valid time bounds to derive M.",
+      "forms": {
+        "declarative": "Two present tasks sharing a single resource must run in one of two orders: the second starts after the first finishes, or vice versa. A binary order variable relaxes the inactive order using valid directional time bounds.",
+        "formula": "s_j>=s_i+p_i-M_ij*(1-y); s_i>=s_j+p_j-M_ji*y; y binary, valid time-based M values.",
+        "procedural": "1. Confirm both tasks occupy the same single resource. 2. Derive M_ij,M_ji from time bounds. 3. With binary y use s_j>=s_i+p_i-M_ij*(1-y) and s_i>=s_j+p_j-M_ji*y. 4. Check each order and add presence gating for optional tasks.",
+        "example": "For jobs A and B on one machine, y=1 enforces s_B>=s_A+p_A and y=0 enforces s_A>=s_B+p_B. The pair s_B>=s_A+p_A-M_AB*(1-y), s_A>=s_B+p_B-M_BA*y implements these alternatives using valid time-based bounds."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision",
+        "k2_v6_revision"
+      ],
+      "tags": [
+        "scheduling",
+        "non overlap"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "s_i and s_j are start times of present nonpreemptive tasks with fixed durations p_i,p_j on the same unit-capacity resource. Directional M values follow valid time bounds. Independent resources, optional jobs and assignment-time tables need different premises or gating.",
+      "display_title": "独占资源不能重叠使用",
+      "display_description": "为共用同一资源的作业建立先后次序，避免时间冲突。"
+    },
+    {
+      "knowledge_id": "k2.binary_product",
+      "title": "Exact binary-times-bounded-variable product",
+      "category": "K2",
+      "group": "K2-E",
+      "applies": "A business relationship involves a yes/no choice multiplying a quantity with finite stated or derivable bounds. Variables y, x and w may be introduced during formulation; a conditional clause alone does not require a product encoding.",
+      "boundary": "These four inequalities are exact for binary y, not for two unrestricted continuous factors; retain both lower and upper bounds, including negative L if applicable.",
+      "forms": {
+        "declarative": "The product variable is at least the lower bound times the binary and at most the upper bound times it. It is also at least x minus the upper bound times one minus the binary, and at most x minus the lower bound times one minus the binary.",
+        "formula": "w>=L*y; w<=U*y; w>=x-U*(1-y); w<=x-L*(1-y); y binary, L<=x<=U.",
+        "procedural": "1. Define w=y*x and establish finite L<=x<=U with binary y. 2. Add w>=L*y and w<=U*y. 3. Add w>=x-U*(1-y) and w<=x-L*(1-y). 4. Retain all four rows, including a negative lower bound when applicable.",
+        "example": "For a binary-gated quantity x in [L,U], impose w>=L*y, w<=U*y, w>=x-U*(1-y), and w<=x-L*(1-y). At y=0 these force w=0; at y=1 they force w=x. Negative L is allowed, whereas two free continuous factors are outside this exact rule."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision",
+        "k2_v6_revision"
+      ],
+      "tags": [
+        "linearization",
+        "product"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "w denotes y*x, with binary y and bounded real x, possibly also integer, whose finite bounds L<=x<=U may include negative L. Variables can be introduced to represent the business relationship. All four inequalities matter; two unrestricted continuous factors are outside this exact rule.",
+      "display_title": "选择状态与业务量联动",
+      "display_description": "在已知数量边界下，处理是否选择与业务量相乘的关系。"
+    },
+    {
+      "knowledge_id": "k2.cost_profit",
+      "title": "Cost, revenue, and fixed-charge accounting",
+      "category": "K2",
+      "group": "K2-F",
+      "applies": "Cost or profit depends on identifiable billed activities, rates and avoidable fixed charges.",
+      "boundary": "Do not subtract already-net costs again or divide per-item prices by vehicle capacity. Link avoidable fees to activation; retain unavoidable constants in the business metric.",
+      "forms": {
+        "declarative": "Sum variable charges and linked avoidable fixed fees for cost; subtract them from revenue for profit. Each rate multiplies its own billing quantity with consistent units and stated conversions.",
+        "formula": "min sum_i c_i*x_i+sum_j F_j*y_j; or max sum_i r_i*x_i-sum_i c_i*x_i-sum_j F_j*y_j.",
+        "procedural": "1. Identify each rate, billed object and unit conversion. 2. Map variable charges/revenues to quantities and avoidable fees to activations. 3. Form cost or profit. 4. Preserve the original business metric under objective transformations.",
+        "example": "If x batches each contain b items sold at price r per item, revenue is r*b*x. An avoidable setup fee F uses activation y, giving profit r*b*x-c*x-F*y when c is cost per batch."
+      },
+      "sources": [
+        "project_reorganization",
+        "mosek_mio",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "objective",
+        "profit",
+        "fixed charge"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Map each rate to its billed quantity: units per batch, revenue per outlet, committed paid time or elapsed project time. Include stated conversion factors. An auxiliary objective may differ from the original business metric; preserve that metric's definition.",
+      "display_title": "成本、收益与固定费用",
+      "display_description": "核对成本与利润口径，区分按数量发生和启用时发生的费用。"
+    },
+    {
+      "knowledge_id": "k2.minimax",
+      "title": "Maximum-based objectives and makespan",
+      "category": "K2",
+      "group": "K2-F",
+      "applies": "The objective minimizes the largest of several expressions, such as completion times or scenario costs.",
+      "boundary": "The epigraph variable equals the maximum at optimum only when minimizing it actually drives it down and it is not additionally forced upward; this is not minimizing their sum.",
+      "forms": {
+        "declarative": "To minimize the largest component, minimize one auxiliary variable constrained to be at least every component. At the optimum it attains the maximum when nothing else prevents objective pressure from lowering it.",
+        "formula": "min z subject to z>=f_i(x) for every i; for makespan f_i(x)=s_i+p_i.",
+        "procedural": "1. Identify the largest-component rather than total objective. 2. Introduce z. 3. Add z>=f_i(x) for every component i. 4. Minimize z; for makespan use completion components s_i+p_i.",
+        "example": "For parallel jobs with completion times s_i+p_i, minimize z with z>=s_i+p_i for all i. This minimizes their maximum, provided z can be driven down to it; summing completion times would express a different objective."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "k2_v4_revision",
+        "mosek_linear",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "makespan",
+        "worst case",
+        "objective"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "f_i(x) are comparable component quantities, such as completion times s_i+p_i, and z bounds them above. Objective pressure must actually lower z; an independent constraint forcing it higher can prevent equality with the maximum. A sum objective expresses a different preference.",
+      "display_title": "最坏项与最长完成时间",
+      "display_description": "通过最大项刻画最晚完工、最大负担等需要优化的指标。"
+    },
+    {
+      "knowledge_id": "k2.soft_requirement",
+      "title": "One-sided soft requirement",
+      "category": "K2",
+      "group": "K2-F",
+      "applies": "The statement explicitly allows shortfall from a target at a specified positive penalty.",
+      "boundary": "Do not soften mandatory feasibility constraints. The violation variable is minimized to actual shortfall only if the objective and other constraints do not reward inflating it.",
+      "forms": {
+        "declarative": "For an allowed shortfall from a minimum target, add a nonnegative violation to achieved amount so the target is met. Minimize original cost plus the positive penalty times violation; without inflation incentives the violation equals actual shortfall.",
+        "formula": "a(x)+v>=b; v>=0; min original_cost+p*v with p>0.",
+        "procedural": "1. Confirm shortfall is allowed at penalty p>0. 2. Define v>=0. 3. Replace a(x)>=b by a(x)+v>=b. 4. Minimize original_cost+p*v, ensuring no other term rewards excess violation.",
+        "example": "For a soft delivery target b and delivered a(x), use a(x)+v>=b, v>=0, and minimize original_cost+p*v with p>0. When no term rewards inflation, v is zero for a met target and otherwise equals its shortfall; a mandatory target cannot be softened this way."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "mosek_linear",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "shortfall",
+        "soft constraint",
+        "penalty"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "The task explicitly allows shortfall at positive penalty p. Violation v has the same units as the requirement. Its minimum is actual shortfall only if the remaining model does not reward inflation; mandatory feasibility requirements stay hard.",
+      "display_title": "允许违约的软性要求",
+      "display_description": "只在需求允许时引入不足或超额，并明确相应惩罚。"
+    },
+    {
+      "knowledge_id": "k2.deviation",
+      "title": "Two-sided asymmetric deviation penalties",
+      "category": "K2",
+      "group": "K2-F",
+      "applies": "Over-target and under-target outcomes are allowed and carry specified nonnegative penalties.",
+      "boundary": "Nonnegative signed deviations describe a soft target, not a mandatory equality. Simultaneous opposite deviations are avoidable at an optimum with positive total penalty and no reward for inflation.",
+      "forms": {
+        "declarative": "Achievement minus target equals positive deviation minus negative deviation. Both deviations are nonnegative and the objective minimizes their separately weighted penalties. The over-target and under-target weights need not be equal.",
+        "formula": "a(x)-g=d_plus-d_minus; d_plus,d_minus>=0; min p_plus*d_plus+p_minus*d_minus, p_plus,p_minus>=0.",
+        "procedural": "1. Define the target g and both deviation directions. 2. Set a(x)-g=d_plus-d_minus with nonnegative deviations. 3. Minimize p_plus*d_plus+p_minus*d_minus using given nonnegative penalties. 4. Check the penalty direction and any inflation incentives.",
+        "example": "For achievement a(x) and target g, let a(x)-g=d_plus-d_minus with both deviations nonnegative. Minimizing p_plus*d_plus+p_minus*d_minus prices each side separately. If a(x)>g, a minimal split is d_plus=a(x)-g,d_minus=0; the other side is symmetric."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "mosek_linear",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "goal programming",
+        "deviation",
+        "absolute value"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "d_plus and d_minus are nonnegative over-target and under-target deviations from g, with nonnegative side-specific penalties. Positive total penalty makes simultaneous inflation avoidable only absent other incentives or constraints. A soft target is not a hard equality on achievement.",
+      "display_title": "偏离目标的双向惩罚",
+      "display_description": "分别计算高于与低于目标的偏差，保留不同的业务代价。"
+    },
+    {
+      "knowledge_id": "k2.weighted_objective",
+      "title": "Weighted multi-criterion objective",
+      "category": "K2",
+      "group": "K2-F",
+      "applies": "The task specifies compensatory trade-offs with explicit criterion weights.",
+      "boundary": "Weights and normalization must be specified or justified, not invented; weighted sums do not enforce strict lexicographic priority.",
+      "forms": {
+        "declarative": "A weighted objective minimizes the sum of each cost-oriented criterion times its specified nonnegative weight. Weights encode compensatory trade-offs and must account for the documented criterion scales.",
+        "formula": "min sum_k w_k*f_k(x), w_k>=0, with each f_k oriented as a cost and its scale documented.",
+        "procedural": "1. Orient each criterion f_k as a cost. 2. Retain supplied or justified scales and nonnegative w_k. 3. Minimize sum_k w_k*f_k(x). 4. Do not infer strict priority from an arbitrary large weight.",
+        "example": "For two cost criteria f_1,f_2 and given weights w_1,w_2>=0, minimize w_1*f_1(x)+w_2*f_2(x). Changing one criterion scale without adjusting its weight changes the trade-off; this weighted sum is not automatically lexicographic priority."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "gurobi_multiobjective",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "objective aggregation",
+        "multi objective"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "Every f_k is oriented as a cost and its units/scale are documented. Nonnegative weights and normalization are supplied or justified. The preference is compensatory; arbitrary large weights do not prove strict priority.",
+      "display_title": "多指标权重组合",
+      "display_description": "在权重和单位明确时，将多个业务指标组合为一个目标。"
+    },
+    {
+      "knowledge_id": "k2.lexicographic",
+      "title": "Strict objective priority",
+      "category": "K2",
+      "group": "K2-F",
+      "applies": "One objective has strict priority over another rather than a compensatory weight.",
+      "boundary": "State any allowed degradation and numerical tolerance. An arbitrary huge weight is not a proof of lexicographic priority.",
+      "forms": {
+        "declarative": "First minimize the highest-priority objective to obtain its optimum. Then minimize the next objective over the original constraints while keeping the first no worse than that optimum plus the justified allowed degradation.",
+        "formula": "v1=min f1(x); then min f2(x) subject to original constraints and f1(x)<=v1+epsilon, with justified epsilon.",
+        "procedural": "1. Solve min f1(x) on the original feasible set to obtain v1. 2. Specify justified epsilon, zero for exact priority. 3. Add f1(x)<=v1+epsilon to the original constraints. 4. Minimize f2(x) on this restricted set.",
+        "example": "For a primary cost f1 and secondary cost f2, obtain v1=min f1(x) first. Then minimize f2(x) under the original rows and f1(x)<=v1+epsilon. Epsilon zero preserves exact priority; a positive value allows stated degradation rather than arbitrary weighted compensation."
+      },
+      "sources": [
+        "project_reorganization",
+        "k2_v4_revision",
+        "gurobi_multiobjective",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "priority",
+        "goal programming"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "The first criterion has strict priority and its optimum v1 is obtained on the original feasible set. Exact mathematical priority uses epsilon=0; positive justified epsilon explicitly permits degradation, and numerical tolerance is documented.",
+      "display_title": "严格的目标优先级",
+      "display_description": "表达先满足主目标、再优化次目标的明确优先顺序。"
+    },
+    {
+      "knowledge_id": "k2.expectation",
+      "title": "Expected-value objective and information timing",
+      "category": "K2",
+      "group": "K2-F",
+      "applies": "Scenario probabilities are given and the stated criterion is expected cost or return.",
+      "boundary": "Expectation is not a chance constraint or worst-case guarantee. Do not assume equal probabilities; decisions made before scenarios are observed must remain shared.",
+      "forms": {
+        "declarative": "An expected-cost objective is the probability-weighted sum of scenario costs. Probabilities are nonnegative and normalized. Decisions made before observation are shared across scenarios, while only permitted later decisions may vary.",
+        "formula": "min sum_s p_s*C_s(x,z_s), p_s>=0, sum_s p_s=1; x is shared, z_s allowed only after scenario observation.",
+        "procedural": "1. Confirm an expected-value criterion and supplied p_s>=0 summing to one. 2. Separate shared pre-observation x from allowed later z_s. 3. Minimize sum_s p_s*C_s(x,z_s). 4. Do not substitute equal probabilities or a worst-case guarantee.",
+        "example": "For scenarios s with costs C_s(x,z_s) and supplied p_s, minimize sum_s p_s*C_s(x,z_s), with p_s>=0 and sum_s p_s=1. The same x is used in every scenario before observation; scenario-dependent z_s is allowed only after the relevant information arrives."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy",
+        "k2_v4_revision",
+        "k2_v5_revision"
+      ],
+      "tags": [
+        "expected value",
+        "uncertainty"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "interpretation": "p_s are supplied probabilities, nonnegative and summing to one. x is chosen before scenario observation and stays shared; z_s is allowed only afterward. Expected-value preference differs from worst-case or chance protection, and deterministic forecasts do not alone create scenarios.",
+      "display_title": "期望目标与信息时点",
+      "display_description": "核对给定场景和概率，区分决策时已知与事后才知的信息。"
+    },
+    {
+      "knowledge_id": "k3.solver_selection",
+      "title": "Match backend to the formulated model",
+      "category": "K3",
+      "group": "solver_implementation",
+      "applies": "A completed formulation must be assigned to an available solver backend.",
+      "boundary": "Check installed solver capabilities and license availability; do not remove nonlinearity or integrality merely to fit a chosen backend.",
+      "forms": {
+        "declarative": "Use PuLP for linear LP/MIP interfaces, CVXPY for models expressible under its applicable disciplined rules with a compatible installed solver, or Gurobi for supported linear, integer, quadratic, and other supported nonlinear formulations."
+      },
+      "sources": [
+        "pulp_api",
+        "cvxpy_dcp",
+        "gurobi_constraints"
+      ],
+      "tags": [
+        "solver"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "选择匹配模型的求解器",
+      "display_description": "按线性、整数与其他模型特征检查后端是否支持，不放松模型。"
+    },
+    {
+      "knowledge_id": "k3.pulp",
+      "title": "PuLP linear-model implementation",
+      "category": "K3",
+      "group": "solver_implementation",
+      "applies": "The selected backend is PuLP and the mathematical model is linear.",
+      "boundary": "Products of two decision variables are not affine PuLP expressions; use only an already justified reformulation, not silent multiplication or rounding.",
+      "forms": {
+        "declarative": "Create LpProblem with the stated sense; use LpVariable with explicit bounds/category, lpSum for affine sums, prob += for objective and named constraints, then solve with a configured available backend."
+      },
+      "sources": [
+        "pulp_api"
+      ],
+      "tags": [
+        "pulp",
+        "linear"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "PuLP 线性模型实现",
+      "display_description": "将线性与整数模型映射到 PuLP，并记录实际后端与状态。"
+    },
+    {
+      "knowledge_id": "k3.gurobi",
+      "title": "Gurobi model construction",
+      "category": "K3",
+      "group": "solver_implementation",
+      "applies": "The selected backend is Gurobi and its API supports the formulated constraint types.",
+      "boundary": "Do not replace a meaningful finite bound by infinity to silence an API error; unsupported nonlinear syntax requires a documented API or valid mathematical reformulation.",
+      "forms": {
+        "declarative": "Create gp.Model; use addVar/addVars with explicit lb, ub, and vtype, setObjective with the required sense, addConstr/addConstrs for supported expressions, and optimize. Pass numeric parameter bounds; represent variable-dependent bounds as constraints."
+      },
+      "sources": [
+        "gurobi_constraints"
+      ],
+      "tags": [
+        "gurobi"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "Gurobi 模型构建",
+      "display_description": "在可用环境与许可范围内构建模型，正确提取求解状态。"
+    },
+    {
+      "knowledge_id": "k3.cvxpy",
+      "title": "CVXPY curvature and backend checks",
+      "category": "K3",
+      "group": "solver_implementation",
+      "applies": "The selected backend is CVXPY for a formulated convex/DCP model.",
+      "boundary": "A mathematically convex expression may not be recognized in arbitrary syntax. A failed DCP check is not permission to discard a constraint; DQCP or other extensions require a separate justified workflow.",
+      "forms": {
+        "declarative": "Use cp.Variable and CVXPY atoms, build cp.Problem, check is_dcp(), and solve with a compatible installed solver. Declare sign attributes when needed for curvature analysis and use a mixed-integer-capable backend for integer domains."
+      },
+      "sources": [
+        "cvxpy_dcp"
+      ],
+      "tags": [
+        "cvxpy",
+        "convex"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "CVXPY 模型与后端检查",
+      "display_description": "核对表达式规则及后端能力，避免将整数问题交给不支持的求解器。"
+    },
+    {
+      "knowledge_id": "k3.indexed_data",
+      "title": "Safe indexing and complete input data",
+      "category": "K3",
+      "group": "solver_implementation",
+      "applies": "Solver expressions access variables or coefficients through indexed data structures.",
+      "boundary": "Use a default only when the data specification gives it; silently treating a missing cost or capacity as zero changes the model.",
+      "forms": {
+        "declarative": "Validate required keys and dimensions before model creation; build variables and sums from the same eligible tuple set; raise a clear missing-data error for absent required coefficients."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "data",
+        "indexing"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "数据索引与完整性检查",
+      "display_description": "检查对象、时期与组合的索引是否一致，识别输入缺口。"
+    },
+    {
+      "knowledge_id": "k3.status",
+      "title": "Status-aware solution extraction",
+      "category": "K3",
+      "group": "solver_implementation",
+      "applies": "A solve has returned and objective or variable values are to be read.",
+      "boundary": "A feasible incumbent at a time limit is not proven optimal. Keep primal feasibility, optimality, solver gap, and gold-objective agreement as separate checks.",
+      "forms": {
+        "declarative": "Check solver status and incumbent availability first. In Gurobi inspect Status and SolCount before ObjVal/X; in PuLP check LpStatus and available values; in CVXPY distinguish optimal, optimal_inaccurate, infeasible, unbounded, and unavailable values."
+      },
+      "sources": [
+        "project_reorganization",
+        "alphaopt_taxonomy"
+      ],
+      "tags": [
+        "solver status",
+        "solution extraction"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "按求解状态读取方案",
+      "display_description": "区分最优、可行但未证最优、不可行和超时，再读取决策量。"
+    },
+    {
+      "knowledge_id": "k3.numerical_check",
+      "title": "Numerical residuals and integrality checks",
+      "category": "K3",
+      "group": "solver_implementation",
+      "applies": "A numerical solver has returned an incumbent with floating-point values.",
+      "boundary": "Do not round and claim feasibility without rechecking all constraints; numerical tolerance is not authorization to relax the mathematical requirement.",
+      "forms": {
+        "declarative": "Evaluate original constraint residuals and bounds in consistent units; check integer distances against a declared tolerance. Report tolerances and solver gap rather than testing exact floating-point equality."
+      },
+      "sources": [
+        "gurobi_constraints"
+      ],
+      "tags": [
+        "numerical stability",
+        "validation"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "约束残差与整数性验证",
+      "display_description": "根据模型独立重算约束、变量边界、整数性及目标值。"
+    },
+    {
+      "knowledge_id": "k3.diagnosis",
+      "title": "Distinguish execution errors from model infeasibility",
+      "category": "K3",
+      "group": "solver_implementation",
+      "applies": "Model construction fails or the solver reports infeasible, unbounded, or no solution.",
+      "boundary": "Do not drop constraints, invent bounds, or soften hard requirements merely to obtain a successful solve; report an unresolved modeling issue when semantics require clarification.",
+      "forms": {
+        "declarative": "Separate missing packages/licenses, data/index errors, unsupported expressions, and solver-reported model status. Diagnose infeasibility or unboundedness against the unchanged formulation and use solver diagnostics when available."
+      },
+      "sources": [
+        "project_reorganization"
+      ],
+      "tags": [
+        "debugging",
+        "infeasible"
+      ],
+      "review_status": "assistant_curated_not_independently_expert_reviewed",
+      "display_title": "区分执行错误与模型不可行",
+      "display_description": "分别定位依赖、代码、求解状态和业务约束冲突。"
+    }
+  ],
+  "operational_protocol": "aligned_knowledge_views_v2"
+}

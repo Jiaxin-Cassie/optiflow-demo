@@ -1,0 +1,192 @@
+{
+  "context": "Development acceptance using explicitly simulated participants; no actual user-research conclusions.",
+  "templates": {
+    "production": {
+      "solver": {
+        "status": "Optimal",
+        "raw_status": "optimal",
+        "objective_value": 10000.0,
+        "solution": {
+          "A": 100.0,
+          "B": 200.0
+        },
+        "backend": "SCIPY/HiGHS",
+        "runtime_seconds": 2.888688999984879,
+        "code_executable": true
+      },
+      "summary": {
+        "eligible": true,
+        "recommendation": "建议安排：产品 A 产量 100 件；产品 B 产量 200 件。",
+        "objective_summary": "本方案以最大化总利润为目标，模型计算结果为 10,000 元。",
+        "feasibility_summary": "结果通过当前模型中 2 条显式约束及变量边界、整数性和目标值重算检查。",
+        "limitations": "数值检查通过表示结果满足当前数学模型，不代表原始业务需求已经得到独立验证。"
+      }
+    },
+    "allocation": {
+      "solver": {
+        "status": "Optimal",
+        "raw_status": "optimal",
+        "objective_value": 195.0,
+        "solution": {
+          "search": 30.0,
+          "feed": 15.0
+        },
+        "backend": "SCIPY/HiGHS",
+        "runtime_seconds": 2.8736297999857925,
+        "code_executable": true
+      },
+      "summary": {
+        "eligible": true,
+        "recommendation": "建议安排：搜索广告 30 单位；信息流广告 15 单位。",
+        "objective_summary": "本方案以最大化预计有效线索为目标，模型计算结果为 195 个。",
+        "feasibility_summary": "结果通过当前模型中 1 条显式约束及变量边界、整数性和目标值重算检查。",
+        "limitations": "数值检查通过表示结果满足当前数学模型，不代表原始业务需求已经得到独立验证。"
+      }
+    },
+    "staffing": {
+      "solver": {
+        "status": "Optimal",
+        "raw_status": "optimal",
+        "objective_value": 2900.0,
+        "solution": {
+          "day": 8.0,
+          "night": 5.0
+        },
+        "backend": "SCIPY/HiGHS",
+        "runtime_seconds": 2.8576974000316113,
+        "code_executable": true
+      },
+      "summary": {
+        "eligible": true,
+        "recommendation": "建议安排：白班人数 8 人；晚班人数 5 人。",
+        "objective_summary": "本方案以最小化每日人力成本为目标，模型计算结果为 2,900 元。",
+        "feasibility_summary": "结果通过当前模型中 1 条显式约束及变量边界、整数性和目标值重算检查。",
+        "limitations": "数值检查通过表示结果满足当前数学模型，不代表原始业务需求已经得到独立验证。"
+      }
+    }
+  },
+  "production_cap_100": {
+    "comparable": true,
+    "reasons": [],
+    "variables": [
+      {
+        "variable": "A",
+        "before": 100.0,
+        "after": 100.0,
+        "delta": 0.0,
+        "semantics_match": true,
+        "label": "产品 A 产量"
+      },
+      {
+        "variable": "B",
+        "before": 200.0,
+        "after": 200.0,
+        "delta": 0.0,
+        "semantics_match": true,
+        "label": "产品 B 产量"
+      }
+    ],
+    "change_note": "A <= 100",
+    "before_value": 10000.0,
+    "after_value": 10000.0,
+    "delta": 0.0,
+    "relative_percent": 0.0,
+    "improvement": "不变",
+    "summary": "v1 → v2：总利润保持不变。按最大化目标衡量为“不变”。这是对应模型版本的结果差异，不能据此断言某项修改是唯一原因。"
+  },
+  "production_cap_80": {
+    "comparable": true,
+    "reasons": [],
+    "variables": [
+      {
+        "variable": "A",
+        "before": 100.0,
+        "after": 80.0,
+        "delta": -20.0,
+        "semantics_match": true,
+        "label": "产品 A 产量"
+      },
+      {
+        "variable": "B",
+        "before": 200.0,
+        "after": 210.0,
+        "delta": 10.0,
+        "semantics_match": true,
+        "label": "产品 B 产量"
+      }
+    ],
+    "change_note": "A <= 80",
+    "before_value": 10000.0,
+    "after_value": 9500.0,
+    "delta": -500.0,
+    "relative_percent": -5.0,
+    "improvement": "下降",
+    "summary": "v1 → v3：总利润减少 500 元。按最大化目标衡量为“下降”。这是对应模型版本的结果差异，不能据此断言某项修改是唯一原因。"
+  },
+  "simulated_study_metrics": {
+    "started": 2,
+    "completed": 1,
+    "completion_rate": 0.5,
+    "feedback_count": 1,
+    "confirmation_count": 1,
+    "review_seconds": [
+      0.116535
+    ],
+    "review_mean_seconds": 0.116535,
+    "understanding": {
+      "完全能理解": 0,
+      "基本能理解": 0,
+      "不太能理解": 0,
+      "完全无法理解": 0
+    },
+    "difficulty": {
+      "理解业务规则": 0,
+      "判断是否遗漏约束": 0,
+      "补充修改需求": 0,
+      "理解决策结果": 0,
+      "其他": 0
+    },
+    "assessed_count": 0,
+    "discovery_count": 0,
+    "discovery_rate": null
+  },
+  "study_events": [
+    {
+      "name": "usability_test_started",
+      "timestamp": "2026-10-29T06:32:59.797693+00:00",
+      "version": 0
+    },
+    {
+      "name": "model_review_opened",
+      "timestamp": "2026-10-29T06:32:59.876986+00:00",
+      "version": 1
+    },
+    {
+      "name": "review_feedback_submitted",
+      "timestamp": "2026-10-29T06:32:59.893984+00:00",
+      "version": 1
+    },
+    {
+      "name": "model_review_opened",
+      "timestamp": "2026-10-29T06:32:59.974509+00:00",
+      "version": 2
+    },
+    {
+      "name": "review_confirmed",
+      "timestamp": "2026-10-29T06:32:59.993521+00:00",
+      "version": 2
+    },
+    {
+      "name": "result_viewed",
+      "timestamp": "2026-10-29T06:33:02.925251+00:00",
+      "version": 2
+    },
+    {
+      "name": "usability_test_completed",
+      "timestamp": "2026-10-29T06:33:02.937260+00:00",
+      "version": 2
+    }
+  ],
+  "exported_records": 2,
+  "questionnaires_collected": 0
+}

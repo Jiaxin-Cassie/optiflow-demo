@@ -1,0 +1,5 @@
+{$OPTIFLOW_DOMAIN} {
+    header Referrer-Policy "no-referrer"
+    header X-Robots-Tag "noindex, nofollow"
+    reverse_proxy optiflow:8501
+}

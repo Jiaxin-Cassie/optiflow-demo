@@ -1,0 +1,14 @@
+.venv/
+.venv-workbench/
+__pycache__/
+*.pyc
+.env
+.streamlit/secrets.toml
+runtime/
+dist/
+.chart-data-*/
+.ruff_cache/
+gurobi.log
+model.ilp
+deploy.env
+

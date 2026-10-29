@@ -1,0 +1,18 @@
+name: optiflow-study
+services:
+  optiflow:
+    build: .
+    restart: unless-stopped
+    init: true
+    environment:
+      OPTIFLOW_ADMIN_PASSWORD: ${OPTIFLOW_ADMIN_PASSWORD:?Set the administrator password in deploy.env}
+      OPTIFLOW_PUBLIC_URL: ${OPTIFLOW_PUBLIC_URL:-http://127.0.0.1:8501}
+      OPTIFLOW_DB: /data/tasks.sqlite3
+    ports:
+      - "127.0.0.1:8501:8501"
+    volumes:
+      - study_data:/data
+    mem_limit: 2g
+    cpus: 2
+volumes:
+  study_data:

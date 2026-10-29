@@ -1,0 +1,6 @@
+streamlit==1.65.0
+cvxpy==1.7.5
+scipy==1.15.3
+openai==1.60.1
+pydantic==2.10.6
+pandas==2.2.3

@@ -1,0 +1,306 @@
+[
+  {
+    "Path": "__pycache__",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".chart-data-4VgLIX",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".chart-data-8XTCZW",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".chart-data-Jaugg3",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".chart-data-lcjAPt",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".chart-data-lnKeAP",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".chart-data-OEdst1",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".chart-data-zOyJ4Z",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".ruff_cache",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".test_tmp",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".validation_dependencies",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": ".venv",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "2026_EMNLP_ROME (5.20)(1).pdf",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "参考文献",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "实验说明.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "analysis",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "configs",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "data",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\DEMO_AND_INTERVIEW.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\experimental_estimands.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\EXPERIMENTS_V8.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\INDUSTRYOR_RUN.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\K2_SEMANTICS_V6.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\k2_v8_development_diagnosis.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\k2_v8_development_evidence.json",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\k2_v8_experiment_flow.svg",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\k2_v8_implementation_report.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\k2_v8_unified_development_replay.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\k2_v8_validation",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\K3_STAGE_CONTRACT_V4.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\knowledge_condition_experiments.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\KNOWLEDGE_LIBRARY.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\literature_and_redesign_20261024.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\MODELING_ARTIFACTS.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\PRODUCT_SPEC.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\RESEARCH_README.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\RQ_PROTOCOL_V4.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\RQ4_PRESENTATION_V5.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\SELECTION_BOUNDARY_V9.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\SEMANTIC_ROUTING.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\UNCERTAIN_KNOWLEDGE_CARDS.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\UNCERTAIN_KNOWLEDGE.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\UNCERTAINTY_PROTOCOL_V7.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\WORKBENCH_ARCHITECTURE.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "docs\\WORKBENCH_VALIDATION.md",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "experiments",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "gurobi.log",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "KnowledgeVerification",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "model.ilp",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "models",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "outputs",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "requirements-py39.txt",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "requirements-rq-optional.txt",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "results",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "scripts",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "skill_library\\archive",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "skill_library\\k2_v8_changes.json",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "skill_library\\knowledge_v8.json",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "skill_library\\reviews",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "skill_library\\uncertain_knowledge.json",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\__pycache__",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\agents\\__pycache__",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\baselines",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\baselines\\__pycache__",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\conditional_k2_router.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\evidence.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\experiment_records.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\failure_trace.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\independent_evaluation.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\moe_dynamic_routing.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\result_classification.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\rule_dictionary.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\text_similarity.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\workbench\\__pycache__",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\workbench\\history.py",
+    "Status": "deleted_or_absent"
+  },
+  {
+    "Path": "src\\workbench\\tests\\__pycache__",
+    "Status": "deleted_or_absent"
+  }
+]
