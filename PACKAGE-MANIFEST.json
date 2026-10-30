@@ -39,8 +39,8 @@
     },
     {
       "path": "DEMO-GUIDE.md",
-      "bytes": 4344,
-      "sha256": "749e7ca7e02bb9b4ade5d2b458c2e86cf1f6641736d45ad9aeaf6763daa83ad3"
+      "bytes": 2706,
+      "sha256": "12bd50da235d71913d3786a7a2f5fac3c5f38c7dfcf28363141c7179efa27036"
     },
     {
       "path": "DEPLOY-GUIDE.md",
@@ -59,13 +59,13 @@
     },
     {
       "path": "OptiFlow-PRD.md",
-      "bytes": 9303,
-      "sha256": "c334fde5dda290f80473e162f5c66e2adb947423e3227e9c59ad6731e06616d2"
+      "bytes": 9604,
+      "sha256": "5a2c539baedb9369397be101a5368968e956a61673b9af582b9ad0ca7f367202"
     },
     {
       "path": "README.md",
-      "bytes": 16003,
-      "sha256": "383f66aa377010370f65930b03bd821fb6edd95ba8322c9111d262ec3cae060d"
+      "bytes": 17804,
+      "sha256": "6fc7dfdac7deb01a1f2bfdc07510ec42188e38f36cb80990effbec871bf9897a"
     },
     {
       "path": "compose.public.yaml",
@@ -119,23 +119,23 @@
     },
     {
       "path": "docs/P0-DELIVERY.md",
-      "bytes": 8110,
-      "sha256": "285eb45a06e1b89661743732138462d9a2f53dcf827e1c08c280ae4f8b047efd"
+      "bytes": 7926,
+      "sha256": "11166122168a4c42331fbb7eefa38aea74d9dcc3757f3b524987366af86aa85d"
     },
     {
       "path": "docs/PRODUCT-DECISIONS.md",
-      "bytes": 3079,
-      "sha256": "50dfe1429463dfe16c3035fac6df8ac6b3702a1e0291868c5e6d2dfdc12aa0b3"
+      "bytes": 3335,
+      "sha256": "d7208736db380e468abf59f4b039c9a61cc8ab4ded029cb677ffadd8c83cf28e"
     },
     {
       "path": "docs/README.md",
-      "bytes": 1766,
-      "sha256": "1791cceb48c352a44d963f68c7176489cffd2921d70b65310ca2e00b6fce227f"
+      "bytes": 1905,
+      "sha256": "f13d0b62917d76f4a771dec064b8a11eb159200f4cb39252c9c5bc694a0a5288"
     },
     {
       "path": "docs/RESUME-DEPLOY.md",
-      "bytes": 3541,
-      "sha256": "99d056bc1a858714aab7ce5bb9e63c05516c350e59546e52a589b70e1904a392"
+      "bytes": 3092,
+      "sha256": "6ee2a3c9056bb92279fa6f3d254f926d10f1e3a2de10ae30b2b08fdc515a68b7"
     },
     {
       "path": "docs/USABILITY-GUIDE.md",
@@ -144,13 +144,13 @@
     },
     {
       "path": "docs/UX-REDESIGN.md",
-      "bytes": 7796,
-      "sha256": "45ae4e0d3e88619df29045deb5ea72d3f2495ec9ff0ec829629ded24a4cbb1c6"
+      "bytes": 8141,
+      "sha256": "9544928426445426011a522a2befd1e1b3bdefdfafb4df15d03c36beb56483db"
     },
     {
       "path": "docs/VALIDATION.md",
-      "bytes": 3927,
-      "sha256": "c2366000acff89ff90945bb7335461f12b2390949088bdf4c08ea73bc7aecc1c"
+      "bytes": 2821,
+      "sha256": "94aff08f39f1755d8766ad9eab0f9ca1b8fbb5bebe12946f44cc2d4cfe6df608"
     },
     {
       "path": "docs/WINDOWS-SHARE.md",

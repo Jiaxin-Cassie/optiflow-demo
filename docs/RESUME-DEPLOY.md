@@ -1,21 +1,24 @@
-# OptiFlow 简历公开 Demo
+# OptiFlow 公开 Demo 部署
 
-已部署固定入口：https://optiflow-cassie.streamlit.app/
+我将公开 Demo 部署在 Streamlit Community Cloud，固定入口为 https://optiflow-cassie.streamlit.app/ ，源码为 https://github.com/Jiaxin-Cassie/optiflow-demo 。访客无需我的电脑开机即可访问。
 
 2026-10-29 验证：未登录浏览器可以进入首页，完整走通业务确认、模型确认与云端真实求解，展示 A=100、B=200、利润 10000 的案例结果；应用无异常。本机不使用代理的 HTTPS 连接也返回 200。源码位于 https://github.com/Jiaxin-Cassie/optiflow-demo 。
 
 保留当前 Streamlit V2 界面与四步流程、三类案例、自然语言补充数量限制、模型检查、真实求解、数值检查、版本对比和独立体验反馈。公开入口不需要邀请码，每个浏览器会话进入独立工作区；所有任务仍走原有服务与求解器，不使用静态结果代替计算。
 
-## Streamlit Community Cloud 设置
+## 当前云端配置
 
-1. 将**清理后的简历部署包**解压到独立 GitHub 仓库根目录。不要上传本机原目录中的 `src/config.py`、`.env`、`runtime`、口令、用户问卷或虚拟环境。
-2. 在 https://share.streamlit.io 登录并授权该代码仓库，选择 Create app。
-3. Repository 选择新仓库；Branch 选择实际上传分支；Main file path 填 `resume_demo.py`。
-4. Advanced settings 选择 Python 3.11。App URL 选择一个可用子域名，例如 `optiflow-cassie`；名称只是建议，部署平台确认可用并成功上线后才是实际地址。
-5. 公开案例体验不需要 API Key。默认不启用管理后台。如需查看此实例的演示反馈，在 Streamlit Secrets 设置至少 16 位的 `OPTIFLOW_ADMIN_PASSWORD`；通过固定地址加 `?admin=1` 登录。
-6. 部署成功后，用未登录或无痕浏览器完成一次“案例 → 确认业务规则 → 确认模型 → 求解 → 补充数量上限 → 重新确认与计算 → 体验反馈”，再将平台返回的真实地址写入简历。
+| 配置 | 当前值 |
+| --- | --- |
+| 仓库 | `Jiaxin-Cassie/optiflow-demo` |
+| 分支 | `main` |
+| 入口 | `resume_demo.py` |
+| Python | 3.11 |
+| 子域名 | `optiflow-cassie` |
 
-GitHub Copilot Space 是资料工作区，不能作为 Streamlit 的 Repository；需要普通代码仓库网址，格式为 `https://github.com/账号/仓库名`。
+发布时，我先生成清理后的源码包，再同步到这个独立仓库。发布包会清空配置中的本机密钥，排除 `.env`、运行数据库、口令、原始问卷及虚拟环境。
+
+公开案例体验不需要 API Key。管理后台默认关闭；如果需要管理当前云实例的演示反馈，可以在 Streamlit Secrets 配置至少 16 位的 `OPTIFLOW_ADMIN_PASSWORD`，通过 `?admin=1` 进入登录页。该实例的数据与原受邀测试数据分开。
 
 ## 数据与能力边界
 
@@ -33,4 +36,4 @@ GitHub Copilot Space 是资料工作区，不能作为 Streamlit 的 Repository�
 .venv-workbench/Scripts/python.exe run_experiment.py --method all --dry_run
 ```
 
-Streamlit Cloud 直接运行 `resume_demo.py`。本地及容器仍可通过统一入口 `run_experiment.py --public-demo` 启动。简历链接必须以部署平台成功返回的 URL 为准，不能把建议子域名或临时隧道当作已经上线的固定链接。
+Streamlit Cloud 直接运行 `resume_demo.py`。本地及容器通过统一入口 `run_experiment.py --public-demo` 启动。我在发布后使用未登录浏览器检查业务确认、模型确认和真实求解流程。
